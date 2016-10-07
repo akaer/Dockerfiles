@@ -56,18 +56,22 @@ RUN set -xe \
         php5-gd \
         php5-json \
         php5-openssl \
+        php5-pdo_sqlite \
+        php5-pear \
+        php5-sqlite3 \
         php5-xml \
         php5-zlib \
-        php5-pear \
+        tar \
     && rm -rf /var/cache/apk/* \
     && mkdir /tmp/nginx
 
 ADD files/nginx.conf /etc/nginx/nginx.conf
 ADD files/run.sh /tmp/run.sh
 ADD files/index.html /var/lib/nginx/html/index.html
+ADD files/phpinfo.php /var/lib/nginx/html/phpinfo.php
 
 RUN set -xe \
-    && sed -i 's/nginx:x:100:101/nginx:x:1000:1000/g' /etc/passwd \
+    && sed -i 's/nginx:x:100:101/nginx:x:1000:101/g' /etc/passwd \
     && sed -i 's/memory_limit = .*/memory_limit = 768M/' /etc/php5/php.ini \
     && sed -i 's/post_max_size = .*/post_max_size = 50M/' /etc/php5/php.ini \
     && echo 'date.timezone = "Europe/Berlin"' >> /etc/php5/php.ini \
@@ -80,14 +84,33 @@ RUN set -xe \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-
 RUN set -xe \
     && curl -sSL \
         "http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz" -o /tmp/dokuwiki.tar.gz \
     && tar xvzf /tmp/dokuwiki.tar.gz -C /tmp \
     && mv /tmp/dokuwiki-2016-06-26a /var/lib/nginx/html/dokuwiki \
     && rm -f /tmp/dokuwiki.tar.gz \
-    && chown -R nginx:nginx /var/lib/nginx/html \
+    && cd /var/lib/nginx/html/dokuwiki/lib/plugins/ \
+    # bring in bureaucracy plugin (https://www.dokuwiki.org/plugin:bureaucracy)
+    && mkdir bureaucracy \
+    && curl -sSL \
+        "https://github.com/splitbrain/dokuwiki-plugin-bureaucracy/tarball/master" -o /tmp/bureaucracy-plugin.tar.gz \
+    && tar xvzf /tmp/bureaucracy-plugin.tar.gz -C bureaucracy --strip-components=1 \
+    && rm -f /tmp/bureaucracy-plugin.tar.gz \
+    # bring in do plugin (https://www.dokuwiki.org/plugin:do)
+    && mkdir do \
+    && curl -sSL \
+        "https://github.com/cosmocode/do/tarball/master" -o /tmp/do.tar.gz \
+    && tar xvzf /tmp/do.tar.gz -C do --strip-components=1 \
+    && rm -f /tmp/do.tar.gz \
+    # bring in sqlite plugin (https://github.com/cosmocode/sqlite/tarball/master)
+    && mkdir sqlite \
+    && curl -sSL \
+        "https://github.com/cosmocode/sqlite/tarball/master" -o /tmp/sqlite.tar.gz \
+    && tar xvzf /tmp/sqlite.tar.gz -C sqlite --strip-components=1 \
+    && rm -f /tmp/sqlite.tar.gz \
+
+    && chown nginx:nginx -R /var/lib/nginx/html \
     && chown nginx:nginx -R /var/lib/nginx/tmp/
 
 VOLUME [ "/var/lib/nginx/html/dokuwiki" ]
