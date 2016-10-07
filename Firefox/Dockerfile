@@ -17,6 +17,8 @@
 #   -v /etc/localtime:/etc/localtime:ro \
 #   -v $(pwd):/data akaer/firefox
 #
+# Don't forget to allow X access (e.g. xhost +)
+#
 
 FROM akaer/base
 MAINTAINER André Raabe <andre.raabe@gmail.com>
