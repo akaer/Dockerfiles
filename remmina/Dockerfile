@@ -34,7 +34,6 @@ RUN set -xe \
         freetype \
         libx11 \
         gdk-pixbuf \
-
     && rm -rf /var/cache/apk/*
 
 CMD [ "remmina" ]
