@@ -29,19 +29,19 @@ RUN set -xe \
     && apk update \
     && apk add --no-cache \
         chromium \
-        mesa-gl \
-        mesa-dri-swrast \
-        ttf-ubuntu-font-family \
+        dbus \
+        dbus-x11 \
         freetype \
-        libx11 \
         gdk-pixbuf \
+        libx11 \
+        mesa-dri-swrast \
+        mesa-gl \
         ttf-droid \
         ttf-freefont \
-	dbus \
-	dbus-x11 \
-	udev \
         ttf-liberation \
         ttf-ubuntu-font-family \
+        ttf-ubuntu-font-family \
+        udev \
     && rm -rf /var/cache/apk/*
 
 CMD [ "chromium-browser" ]
