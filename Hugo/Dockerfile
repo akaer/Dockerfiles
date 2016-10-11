@@ -16,6 +16,11 @@
 #   -v $(pwd):/data \ 
 #   akaer/hugo
 #
+#
+# Sample:
+#
+# docker run --rm=true -it -v $(pwd):/data akaer/hugo new site samplesite
+#
 
 FROM akaer/base
 MAINTAINER André Raabe <andre.raabe@gmail.com>
