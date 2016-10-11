@@ -31,7 +31,8 @@ RUN set -ex \
     && apk update \
     && apk add --no-cache \
         curl \
-    && curl https://forgerock.org/djs/opendjrel.js?948497823 | \
+    && rm -rf /var/cache/apk/* \
+    && curl -sSL https://forgerock.org/djs/opendjrel.js?948497823 | \
         grep -o "http://.*\.zip" | \
         tail -1 | xargs curl -o opendj.zip \
     && unzip opendj.zip \
