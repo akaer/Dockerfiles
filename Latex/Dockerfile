@@ -14,6 +14,7 @@
 # sudo docker run --rm=true -it \
 #   --name latex \
 #   -v /etc/localtime:/etc/localtime:ro \
+#   -v $(pwd):/data \
 #   akaer/latex
 #
 # Sample usage (Copy the run-latex.sh to your ~/bin on Linux):

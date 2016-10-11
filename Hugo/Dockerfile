@@ -13,6 +13,7 @@
 #  sudo docker run --rm=true -it \
 #   --name hugo \
 #   -v /etc/localtime:/etc/localtime:ro \
+#   -v $(pwd):/data \ 
 #   akaer/hugo
 #
 
@@ -34,5 +35,9 @@ RUN set -ex \
     && rm -f /tmp/hugo_${HUGO_VERSION}_linux-64bit.tgz \
     && rm -rf hugo_${HUGO_VERSION}_linux_amd64
 
-CMD [ "hugo", "version" ]
+VOLUME [ "/data" ]
+WORKDIR /data
+
+ENTRYPOINT [ "hugo" ]
+CMD [ "version" ]
 
