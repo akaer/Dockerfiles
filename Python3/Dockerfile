@@ -19,10 +19,14 @@
 FROM akaer/base
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
-RUN set -xe \
+RUN set -ex \
     && apk update \
     && apk add --no-cache \
         python3 \
+    && python3 -m ensurepip \
+    && rm -r /usr/lib/python*/ensurepip \
+    && pip3 install --upgrade pip setuptools \
+    && rm -r /root/.cache \
     && rm -rf /var/cache/apk/*
 
 CMD [ "python3", "--version" ]
