@@ -42,6 +42,9 @@ RUN set -xe \
     && apk update \
     && apk add --no-cache \
         ca-certificates \
+        curl \
+        coreutils \
+        util-linux \
         py-paramiko \
         py-yaml \
         py-jinja2 \
