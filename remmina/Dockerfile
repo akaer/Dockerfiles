@@ -27,13 +27,13 @@ ENV NO_AT_BRIDGE 1
 RUN set -xe \
     && apk update \
     && apk add --no-cache \
-        remmina \
-        mesa-gl \
-        mesa-dri-swrast \
-        ttf-ubuntu-font-family \
         freetype \
-        libx11 \
         gdk-pixbuf \
+        libx11 \
+        mesa-dri-swrast \
+        mesa-gl \
+        remmina \
+        ttf-ubuntu-font-family \
     && rm -rf /var/cache/apk/*
 
 CMD [ "remmina" ]
