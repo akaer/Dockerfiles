@@ -42,31 +42,31 @@ RUN set -xe \
     && apk update \
     && apk add --no-cache \
         ca-certificates \
-        curl \
         coreutils \
-        util-linux \
-        py-paramiko \
-        py-yaml \
-        py-jinja2 \
-        py-httplib2 \
+        curl \
         krb5 \
         krb5-libs \
+        py-httplib2 \
+        py-jinja2 \
+        py-paramiko \
+        py-yaml \
+        util-linux \
         ${builddeps} \
     && python -m ensurepip \
     && rm -r /usr/lib/python*/ensurepip \
     && pip install --upgrade \
-        pip \
-        setuptools \
         ansible \
         httplib2 \
         jinja2 \
         kerberos \
         markupsafe \
         paramiko \
+        pip \
         pysphere \
         PyVmomi \
         pywinrm \
         PyYAML \
+        setuptools \
         six \
         xmltodict \
     && apk del --purge ${builddeps} \
