@@ -6,23 +6,31 @@
 #
 # Create:
 #
-# sudo docker build -t akaer/opendj . 2>&1 |tee docker_build.log
+# sudo docker build --rm -t akaer/opendj . 2>&1 |tee docker_build.log
 #
 # Run:
 #
-#  sudo docker run --rm=true -it \
+#  sudo docker run -d \
 #   --name opendj \
 #   -v /etc/localtime:/etc/localtime:ro \
 #   -p 389:1389 -p 636:1636 akaer/opendj
+#
+# Configure:
+#
+# sudo docker exec -it <CONTAINER-ID> /opt/opendj/bin/dsconfig
+#
+# HINT: You may want to enable the "Referential Integrity Plugin"
 #
 
 FROM akaer/openjre8
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
+ENV OPENDJ_HOSTNAME opendj.ldap-lab.com
 ENV OPENDJ_USER opendj
+ENV OPENDJ_ADMIN CN=Directory\ Manager
 ENV OPENDJ_BASEDN dc=ldap-lab,dc=com
 ENV OPENDJ_PASSWORD P@ssw0rd
-ENV OPENDJ_NUMBER_OF_TESTUSERS 1000
+ENV OPENDJ_NUMBER_OF_TESTUSERS 500
 
 WORKDIR /opt
 
@@ -47,17 +55,26 @@ RUN set -ex \
     && mkdir -p /opt/opendj/instances/template/lib/extensions
 
 RUN set -ex \
-    && ./opendj/setup --cli -p 1389 \
-        --ldapsPort 1636 --enableStartTLS \
+    && ./opendj/setup \
+        --cli \
+        --acceptLicense \
+        --ldapPort 1389 \
+        --ldapsPort 1636 \
+        --adminConnectorPort 4444 \
+        --baseDN "${OPENDJ_BASEDN}" \
+        --rootUserDN "${OPENDJ_ADMIN}" \
+        --rootUserPassword "${OPENDJ_PASSWORD}" \
+        --enableStartTLS \
         --generateSelfSignedCertificate \
-        --sampleData ${OPENDJ_NUMBER_OF_TESTUSERS} --baseDN ${OPENDJ_BASEDN} \
-        -h localhost --rootUserPassword ${OPENDJ_PASSWORD} \
-        --acceptLicense --no-prompt --doNotStart \
+        --sampleData ${OPENDJ_NUMBER_OF_TESTUSERS} \
+        --hostName ${OPENDJ_HOSTNAME} \
+        --no-prompt \
+        --doNotStart \
     && adduser -S -h /home/${OPENDJ_USER} -g "${OPENDJ_USER} user" ${OPENDJ_USER} \
     && chown -R ${OPENDJ_USER} /opt/opendj
 
-# We use there ports because we don't run as root user ;-)
-EXPOSE 1389 1636
+# We use these ports because we don't run as root user ;-)
+EXPOSE 1389 1636 4444
 
 # Copy in the template the first time DJ runs, and start DJ
 
