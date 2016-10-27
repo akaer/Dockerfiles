@@ -13,14 +13,11 @@
 #
 # sudo docker run --rm=true -it \
 #   --name latex \
+#   --user="$(id -u):$(id -g)" \
+#   --net=none \
 #   -v /etc/localtime:/etc/localtime:ro \
 #   -v $(pwd):/data \
-#   akaer/latex
-#
-# Sample usage (Copy the run-latex.sh to your ~/bin on Linux):
-# 
-# cd samples
-# run-latex.sh einfacher_brief.tex
+#   akaer/latex pdflatex <your-tex-file>
 #
 
 FROM ubuntu:16.04
@@ -34,15 +31,15 @@ ENV LATEX_HOME /home/${LATEX_USER}
 RUN set -xe \
     && apt-get update \
     && apt-get install -y \
-	aspell \
-	aspell-de \
-	aspell-de-alt \
-	aspell-en \
-	software-properties-common \
-	texlive-fonts-recommended \
-	texlive-full \
-	texlive-latex-recommended \
-	texlive-xetex \
+    aspell \
+    aspell-de \
+    aspell-de-alt \
+    aspell-en \
+    software-properties-common \
+    texlive-fonts-recommended \
+    texlive-full \
+    texlive-latex-recommended \
+    texlive-xetex \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd --create-home --home-dir ${LATEX_HOME} ${LATEX_USER} \
@@ -53,5 +50,5 @@ USER ${LATEX_USER}
 VOLUME [ "/data" ]
 WORKDIR /data
 
-ENTRYPOINT [ "pdflatex", "--interaction=nonstopmode" ]
+CMD [ "pdflatex", "--interaction=nonstopmode" ]
 
