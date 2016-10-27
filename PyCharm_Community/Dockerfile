@@ -39,6 +39,14 @@ RUN set -xe \
         ttf-freefont \
         ttf-liberation \
         ttf-ubuntu-font-family \
+    && python -m ensurepip \
+    && rm -r /usr/lib/python*/ensurepip \
+    && pip install --upgrade pip setuptools \
+    && rm -r /root/.cache \
+    && python3 -m ensurepip \
+    && rm -r /usr/lib/python*/ensurepip \
+    && pip3 install --upgrade pip setuptools \
+    && rm -r /root/.cache \
     && rm -rf /var/cache/apk/*
 
 RUN set -xe \
