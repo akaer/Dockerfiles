@@ -21,7 +21,12 @@
 FROM alpine:latest
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
+ENV GOVC_INSECURE true
+ENV GOVC_URL https://user:password@vsphere-ip-or-hostname/sdk
+ENV GOVC_DATACENTER VCENTER-NAME
+
 ADD files/govc /usr/bin
 
-CMD [ "govc", "version" ]
+ENTRYPOINT [ "govc" ]
+CMD [ "version" ]
 
