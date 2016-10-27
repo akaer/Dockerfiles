@@ -6,7 +6,7 @@
 #
 # Create:
 #
-# sudo docker build -t akaer/remmina . 2>&1 |tee docker_build.log
+# sudo docker build --rm -t akaer/remmina . 2>&1 |tee docker_build.log
 #
 # Run:
 #

@@ -6,11 +6,11 @@
 #
 # Create:
 #
-# sudo docker build -t akaer/ssh-audit . 2>&1 |tee docker_build.log
+# sudo docker build --rm -t akaer/ssh-audit . 2>&1 |tee docker_build.log
 #
 # or
 #
-# sudo docker build --build-arg BRANCH_TO_USE=develop -t akaer/ssh-audit . 2>&1 |tee docker_build.log
+# sudo docker build --rm --build-arg BRANCH_TO_USE=develop -t akaer/ssh-audit . 2>&1 |tee docker_build.log
 #
 # Run:
 #

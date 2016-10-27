@@ -7,7 +7,7 @@
 #
 # Create:
 #
-# sudo docker build -t akaer/latex .
+# sudo docker build --rm -t akaer/latex . 2>&1 |tee docker_build.log
 #
 # Run:
 #

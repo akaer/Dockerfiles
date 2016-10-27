@@ -6,7 +6,7 @@
 #
 # Create:
 #
-# sudo docker build -t akaer/jenkins . 2>&1 |tee docker_build.log
+# sudo docker build --rm -t akaer/jenkins . 2>&1 |tee docker_build.log
 #
 # Run:
 #
