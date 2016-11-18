@@ -40,9 +40,8 @@ RUN set -ex \
     && apk add --no-cache \
         curl \
     && rm -rf /var/cache/apk/* \
-    && curl -sSL https://forgerock.org/djs/opendjrel.js?948497823 | \
-        grep -o "http://.*\.zip" | \
-        tail -1 | xargs curl -o opendj.zip \
+    && curl -sSL http://maven.forgerock.org/repo/repo/org/forgerock/opendj/opendj-server-legacy/4.0.0-M2/opendj-server-legacy-4.0.0-M2.zip \
+        -o opendj.zip \
     && unzip opendj.zip \
     && rm -f opendj.zip
 
