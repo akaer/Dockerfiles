@@ -1,0 +1,13 @@
+[Unit]
+Description=Guacamole service
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=docker-compose -f /home/vagrant/Dockerfiles/guacamole/docker-compose.yml up
+ExecStop=docker-compose -f /home/vagrant/Dockerfiles/guacamole/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target
+
