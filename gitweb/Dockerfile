@@ -44,13 +44,6 @@ RUN set -xe \
     && ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-RUN set -xe \
-    && git clone https://github.com/kogakure/gitweb-theme.git \
-    && cp -f gitweb-theme/git-favicon.png /usr/share/gitweb/static/ \
-    && cp -f gitweb-theme/git-logo.png /usr/share/gitweb/static/ \
-    && cp -f gitweb-theme/gitweb.css /usr/share/gitweb/static/ \
-    && rm -rf gitweb-theme
-
 ADD files/gitweb.conf /etc/gitweb.conf
 ADD files/nginx.conf /etc/nginx/nginx.conf
 ADD files/default.conf /etc/nginx/conf.d/default.conf
