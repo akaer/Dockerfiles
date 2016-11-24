@@ -32,6 +32,10 @@ ENV OPENDJ_BASEDN dc=ldap-lab,dc=com
 ENV OPENDJ_PASSWORD P@ssw0rd
 ENV OPENDJ_NUMBER_OF_TESTUSERS 500
 
+# Default options for a small instance. Overrride the environment var
+# OPENDJ_JAVA_ARGS as needed
+ENV OPENDJ_JAVA_ARGS -server -Xmx512m -XX:+UseG1GC
+
 WORKDIR /opt
 
 # Fetch the latest nightly build
