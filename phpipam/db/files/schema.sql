@@ -149,6 +149,11 @@ CREATE TABLE `settings` (
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
+VALUES
+    (1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.26', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
+
 
 # Dump of table settingsDomain
 # ------------------------------------------------------------
@@ -338,6 +343,10 @@ CREATE TABLE `vlanDomains` (
   `permissions` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `vlanDomains` (`id`, `name`, `description`, `permissions`)
+VALUES
+    (1, 'default', 'default L2 domain', NULL);
 
 # Dump of table vrf
 # ------------------------------------------------------------
