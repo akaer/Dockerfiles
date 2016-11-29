@@ -46,6 +46,8 @@
 FROM akaer/base
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
+ENV WIKINAME "myWiki-name"
+
 RUN set -xe \
     && apk update \
     && apk add --no-cache \
@@ -67,8 +69,6 @@ RUN set -xe \
 
 ADD files/nginx.conf /etc/nginx/nginx.conf
 ADD files/run.sh /tmp/run.sh
-ADD files/index.html /var/lib/nginx/html/index.html
-ADD files/phpinfo.php /var/lib/nginx/html/phpinfo.php
 
 RUN set -xe \
     && sed -i 's/nginx:x:100:101/nginx:x:1000:101/g' /etc/passwd \
@@ -87,8 +87,7 @@ RUN set -xe \
 RUN set -xe \
     && curl -sSL \
         "http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz" -o /tmp/dokuwiki.tar.gz \
-    && tar xvzf /tmp/dokuwiki.tar.gz -C /tmp \
-    && mv /tmp/dokuwiki-2016-06-26a /var/lib/nginx/html/dokuwiki \
+    && tar --transform='s#^dokuwiki-\([^/]*\)#var/lib/nginx/html/dokuwiki#' -xzf /tmp/dokuwiki.tar.gz \
     && rm -f /tmp/dokuwiki.tar.gz \
     && cd /var/lib/nginx/html/dokuwiki/lib/plugins/ \
     # bring in bureaucracy plugin (https://www.dokuwiki.org/plugin:bureaucracy)
@@ -110,10 +109,20 @@ RUN set -xe \
     && tar xvzf /tmp/sqlite.tar.gz -C sqlite --strip-components=1 \
     && rm -f /tmp/sqlite.tar.gz \
 
-    && chown nginx:nginx -R /var/lib/nginx/html \
-    && chown nginx:nginx -R /var/lib/nginx/tmp/
+    && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/data \
+    && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/conf \
+    && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/lib/plugins \
+    && chown nginx:nginx -R /var/lib/nginx/tmp/ \
+    && rm -f /var/lib/nginx/html/dokuwiki/install.php
 
-VOLUME [ "/var/lib/nginx/html/dokuwiki" ]
+ADD files/phpinfo.php /var/lib/nginx/html/dokuwiki/phpinfo.php
+ADD files/doku-conf-local.php /var/lib/nginx/html/dokuwiki/conf/local.php
+ADD files/doku-conf-plugins.local.php /var/lib/nginx/html/dokuwiki/conf/plugins.local.php
+ADD files/doku-conf-acl.auth.php /var/lib/nginx/html/dokuwiki/conf/acl.auth.php
+ADD files/doku-conf-users.auth.php /var/lib/nginx/html/dokuwiki/conf/users.auth.php
+
+VOLUME [ "/var/lib/nginx/html/dokuwiki/data/pages/doc" ]
+VOLUME [ "/var/lib/nginx/html/dokuwiki/data/media/wiki" ]
 
 EXPOSE 80
 
