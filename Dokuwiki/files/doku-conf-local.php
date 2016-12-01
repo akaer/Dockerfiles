@@ -7,4 +7,5 @@ $conf['superuser'] = '@admin';
 $conf['disableactions'] = 'register';
 $conf['start'] = 'doc:readme';
 $conf['userewrite'] = 0;
+$conf['target']['extern'] = '_blank';
 
