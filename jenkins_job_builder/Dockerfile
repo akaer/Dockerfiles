@@ -28,5 +28,5 @@ RUN set -ex \
 VOLUME /data
 WORKDIR /data
 
-ENTRYPOINT [ "jenkins-jobs" ]
+ENTRYPOINT [ "jenkins-jobs", "--conf", "/data/jenkins_jobs.ini" ]
 
