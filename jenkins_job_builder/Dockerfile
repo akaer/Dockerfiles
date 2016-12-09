@@ -13,7 +13,7 @@
 #  sudo docker run --rm=true -it \
 #       --name jjb \
 #       -v /etc/localtime:/etc/localtime:ro \
-#       -v $(pwd):/opt/jenkins-jobs:ro \
+#       -v $(pwd):/data:ro \
 #       akaer/jjb
 #
 
@@ -25,8 +25,8 @@ RUN set -ex \
     && mkdir -p /opt/jenkins-job \
     && rm -f /etc/jenkins_jobs/jenkins_jobs.ini
 
-VOLUME /opt/jenkins-job
-WORKDIR /opt/jenkins-job
+VOLUME /data
+WORKDIR /data
 
 ENTRYPOINT [ "jenkins-jobs" ]
 
