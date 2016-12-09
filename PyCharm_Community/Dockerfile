@@ -43,16 +43,12 @@ RUN set -xe \
     && rm -r /usr/lib/python*/ensurepip \
     && pip install --upgrade pip setuptools \
     && rm -r /root/.cache \
-    && python3 -m ensurepip \
-    && rm -r /usr/lib/python*/ensurepip \
-    && pip3 install --upgrade pip setuptools \
-    && rm -r /root/.cache \
     && rm -rf /var/cache/apk/*
 
 RUN set -xe \
-    && curl -sSL "https://download.jetbrains.com/python/pycharm-community-5.0.5.tar.gz" -o /tmp/pycharm.tar.gz \
-    && tar -xvzf /tmp/pycharm.tar.gz \
+    && curl -sSL "https://download-cf.jetbrains.com/python/pycharm-community-2016.3.tar.gz" -o /tmp/pycharm.tar.gz \
+    && tar -xzf /tmp/pycharm.tar.gz \
     && rm -f /tmp/pycharm.tar.gz
 
-CMD [ "/pycharm-community-5.0.5/bin/pycharm.sh" ]
+CMD [ "/pycharm-community-2016.3/bin/pycharm.sh" ]
 
