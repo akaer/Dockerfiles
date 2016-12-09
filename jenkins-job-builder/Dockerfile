@@ -10,7 +10,7 @@
 #
 # Run:
 #
-#  sudo docker run --rm=true -it \
+#  sudo docker run -i --rm \
 #       --name jjb \
 #       -v /etc/localtime:/etc/localtime:ro \
 #       -v $(pwd):/data:ro \
@@ -21,9 +21,7 @@ FROM akaer/python
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
 RUN set -ex \
-    && pip install jenkins-job-builder \
-    && mkdir -p /opt/jenkins-job \
-    && rm -f /etc/jenkins_jobs/jenkins_jobs.ini
+    && pip install jenkins-job-builder
 
 VOLUME /data
 WORKDIR /data
