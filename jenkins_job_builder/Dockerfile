@@ -13,7 +13,7 @@
 #  sudo docker run --rm=true -it \
 #       --name jjb \
 #       -v /etc/localtime:/etc/localtime:ro \
-#       -v $(pwd):/opt/jenkins-jobs
+#       -v $(pwd):/opt/jenkins-jobs:ro \
 #       akaer/jjb
 #
 
