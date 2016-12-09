@@ -22,7 +22,8 @@ MAINTAINER André Raabe <andre.raabe@gmail.com>
 
 RUN set -ex \
     && pip install jenkins-job-builder \
-    && mkdir -p /opt/jenkins-job
+    && mkdir -p /opt/jenkins-job \
+    && rm -f /etc/jenkins_jobs/jenkins_jobs.ini
 
 VOLUME /opt/jenkins-job
 WORKDIR /opt/jenkins-job
