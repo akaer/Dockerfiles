@@ -13,7 +13,7 @@
 #  sudo docker run -i --rm \
 #       --name jjw \
 #       -v /etc/localtime:/etc/localtime:ro \
-#       -v $(pwd):/data:ro \
+#       -v $(pwd):/data \
 #       akaer/jjw
 #
 
