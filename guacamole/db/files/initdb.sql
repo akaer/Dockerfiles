@@ -1,23 +1,20 @@
 --
--- Copyright (C) 2013 Glyptodon LLC
+-- Licensed to the Apache Software Foundation (ASF) under one
+-- or more contributor license agreements.  See the NOTICE file
+-- distributed with this work for additional information
+-- regarding copyright ownership.  The ASF licenses this file
+-- to you under the Apache License, Version 2.0 (the
+-- "License"); you may not use this file except in compliance
+-- with the License.  You may obtain a copy of the License at
 --
--- Permission is hereby granted, free of charge, to any person obtaining a copy
--- of this software and associated documentation files (the "Software"), to deal
--- in the Software without restriction, including without limitation the rights
--- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--- copies of the Software, and to permit persons to whom the Software is
--- furnished to do so, subject to the following conditions:
+--   http://www.apache.org/licenses/LICENSE-2.0
 --
--- The above copyright notice and this permission notice shall be included in
--- all copies or substantial portions of the Software.
---
--- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
--- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
--- THE SOFTWARE.
+-- Unless required by applicable law or agreed to in writing,
+-- software distributed under the License is distributed on an
+-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-- KIND, either express or implied.  See the License for the
+-- specific language governing permissions and limitations
+-- under the License.
 --
 
 --
@@ -35,6 +32,8 @@ CREATE TABLE `guacamole_connection_group` (
   -- Concurrency limits
   `max_connections`          int(11),
   `max_connections_per_user` int(11),
+  `enable_session_affinity`  boolean NOT NULL DEFAULT 0,
+
 
   PRIMARY KEY (`connection_group_id`),
   UNIQUE KEY `connection_group_name_parent` (`connection_group_name`, `parent_id`),
@@ -108,6 +107,30 @@ CREATE TABLE `guacamole_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table of sharing profiles. Each sharing profile has a name, associated set
+-- of parameters, and a primary connection. The primary connection is the
+-- connection that the sharing profile shares, and the parameters dictate the
+-- restrictions/features which apply to the user joining the connection via the
+-- sharing profile.
+--
+
+CREATE TABLE guacamole_sharing_profile (
+
+  `sharing_profile_id`    int(11)      NOT NULL AUTO_INCREMENT,
+  `sharing_profile_name`  varchar(128) NOT NULL,
+  `primary_connection_id` int(11)      NOT NULL,
+
+  PRIMARY KEY (`sharing_profile_id`),
+  UNIQUE KEY `sharing_profile_name_primary` (sharing_profile_name, primary_connection_id),
+
+  CONSTRAINT `guacamole_sharing_profile_ibfk_1`
+    FOREIGN KEY (`primary_connection_id`)
+    REFERENCES `guacamole_connection` (`connection_id`)
+    ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table of connection parameters. Each parameter is simply a name/value pair
 -- associated with a connection.
 --
@@ -123,6 +146,27 @@ CREATE TABLE `guacamole_connection_parameter` (
   CONSTRAINT `guacamole_connection_parameter_ibfk_1`
     FOREIGN KEY (`connection_id`)
     REFERENCES `guacamole_connection` (`connection_id`) ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table of sharing profile parameters. Each parameter is simply
+-- name/value pair associated with a sharing profile. These parameters dictate
+-- the restrictions/features which apply to the user joining the associated
+-- connection via the sharing profile.
+--
+
+CREATE TABLE guacamole_sharing_profile_parameter (
+
+  `sharing_profile_id` integer       NOT NULL,
+  `parameter_name`     varchar(128)  NOT NULL,
+  `parameter_value`    varchar(4096) NOT NULL,
+
+  PRIMARY KEY (`sharing_profile_id`, `parameter_name`),
+
+  CONSTRAINT `guacamole_sharing_profile_parameter_ibfk_1`
+    FOREIGN KEY (`sharing_profile_id`)
+    REFERENCES `guacamole_sharing_profile` (`sharing_profile_id`) ON DELETE CASCADE
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -179,6 +223,32 @@ CREATE TABLE `guacamole_connection_group_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table of sharing profile permissions. Each sharing profile permission grants
+-- a user specific access to a sharing profile.
+--
+
+CREATE TABLE guacamole_sharing_profile_permission (
+
+  `user_id`            integer NOT NULL,
+  `sharing_profile_id` integer NOT NULL,
+  `permission`         enum('READ',
+                            'UPDATE',
+                            'DELETE',
+                            'ADMINISTER') NOT NULL,
+
+  PRIMARY KEY (`user_id`, `sharing_profile_id`, `permission`),
+
+  CONSTRAINT `guacamole_sharing_profile_permission_ibfk_1`
+    FOREIGN KEY (`sharing_profile_id`)
+    REFERENCES `guacamole_sharing_profile` (`sharing_profile_id`) ON DELETE CASCADE,
+
+  CONSTRAINT `guacamole_sharing_profile_permission_ibfk_2`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `guacamole_user` (`user_id`) ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table of system permissions. Each system permission grants a user a
 -- system-level privilege of some kind.
 --
@@ -187,7 +257,8 @@ CREATE TABLE `guacamole_system_permission` (
 
   `user_id`    int(11) NOT NULL,
   `permission` enum('CREATE_CONNECTION',
-		    'CREATE_CONNECTION_GROUP',
+                    'CREATE_CONNECTION_GROUP',
+                    'CREATE_SHARING_PROFILE',
                     'CREATE_USER',
                     'ADMINISTER') NOT NULL,
 
@@ -233,48 +304,54 @@ CREATE TABLE `guacamole_user_permission` (
 
 CREATE TABLE `guacamole_connection_history` (
 
-  `history_id`    int(11)  NOT NULL AUTO_INCREMENT,
-  `user_id`       int(11)  NOT NULL,
-  `connection_id` int(11)  NOT NULL,
-  `start_date`    datetime NOT NULL,
-  `end_date`      datetime DEFAULT NULL,
+  `history_id`           int(11)      NOT NULL AUTO_INCREMENT,
+  `user_id`              int(11)      DEFAULT NULL,
+  `username`             varchar(128) NOT NULL,
+  `connection_id`        int(11)      DEFAULT NULL,
+  `connection_name`      varchar(128) NOT NULL,
+  `sharing_profile_id`   int(11)      DEFAULT NULL,
+  `sharing_profile_name` varchar(128) DEFAULT NULL,
+  `start_date`           datetime     NOT NULL,
+  `end_date`             datetime     DEFAULT NULL,
 
   PRIMARY KEY (`history_id`),
   KEY `user_id` (`user_id`),
   KEY `connection_id` (`connection_id`),
+  KEY `sharing_profile_id` (`sharing_profile_id`),
   KEY `start_date` (`start_date`),
   KEY `end_date` (`end_date`),
 
   CONSTRAINT `guacamole_connection_history_ibfk_1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `guacamole_user` (`user_id`) ON DELETE CASCADE,
+    REFERENCES `guacamole_user` (`user_id`) ON DELETE SET NULL,
 
   CONSTRAINT `guacamole_connection_history_ibfk_2`
     FOREIGN KEY (`connection_id`)
-    REFERENCES `guacamole_connection` (`connection_id`) ON DELETE CASCADE
+    REFERENCES `guacamole_connection` (`connection_id`) ON DELETE SET NULL,
+
+  CONSTRAINT `guacamole_connection_history_ibfk_3`
+    FOREIGN KEY (`sharing_profile_id`)
+    REFERENCES `guacamole_sharing_profile` (`sharing_profile_id`) ON DELETE SET NULL
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Copyright (C) 2015 Glyptodon LLC
+-- Licensed to the Apache Software Foundation (ASF) under one
+-- or more contributor license agreements.  See the NOTICE file
+-- distributed with this work for additional information
+-- regarding copyright ownership.  The ASF licenses this file
+-- to you under the Apache License, Version 2.0 (the
+-- "License"); you may not use this file except in compliance
+-- with the License.  You may obtain a copy of the License at
 --
--- Permission is hereby granted, free of charge, to any person obtaining a copy
--- of this software and associated documentation files (the "Software"), to deal
--- in the Software without restriction, including without limitation the rights
--- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
--- copies of the Software, and to permit persons to whom the Software is
--- furnished to do so, subject to the following conditions:
+--   http://www.apache.org/licenses/LICENSE-2.0
 --
--- The above copyright notice and this permission notice shall be included in
--- all copies or substantial portions of the Software.
---
--- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
--- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
--- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
--- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
--- THE SOFTWARE.
+-- Unless required by applicable law or agreed to in writing,
+-- software distributed under the License is distributed on an
+-- "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-- KIND, either express or implied.  See the License for the
+-- specific language governing permissions and limitations
+-- under the License.
 --
 
 -- Create default user "guacadmin" with password "guacadmin"
@@ -289,6 +366,7 @@ SELECT user_id, permission
 FROM (
           SELECT 'guacadmin'  AS username, 'CREATE_CONNECTION'       AS permission
     UNION SELECT 'guacadmin'  AS username, 'CREATE_CONNECTION_GROUP' AS permission
+    UNION SELECT 'guacadmin'  AS username, 'CREATE_SHARING_PROFILE'  AS permission
     UNION SELECT 'guacadmin'  AS username, 'CREATE_USER'             AS permission
     UNION SELECT 'guacadmin'  AS username, 'ADMINISTER'              AS permission
 ) permissions
