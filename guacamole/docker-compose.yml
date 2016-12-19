@@ -3,6 +3,7 @@ services:
     mysql:
         build: db
         restart: always
+        container_name: guacamole_mysql
         environment:
             MYSQL_ROOT_PASSWORD: P@ssw0rd
             MYSQL_PASSWORD: P@ssw0rd
@@ -16,6 +17,7 @@ services:
     guacd:
         image: glyptodon/guacd
         restart: always
+        container_name: guacd
         volumes:
             - /etc/localtime:/etc/localtime:ro
         networks:
@@ -34,8 +36,10 @@ services:
             MYSQL_PORT: 3306
             GUACD_PORT_4822_TCP_ADDR: guacd
             GUACD_PORT_4822_TCP_PORT: 4822
+            GUACD_HOSTNAME: guacd
+            GUACD_PORT: 4822
         ports:
-            - 8080:8080
+            - "8080:8080"
         depends_on:
             - mysql
             - guacd
