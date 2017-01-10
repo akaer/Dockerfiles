@@ -36,7 +36,7 @@ RUN set -xe \
         libffi-dev \
         musl-dev \
         openssl-dev \
-        py-pip \
+        py2-pip \
         python-dev \
         ' \
     && apk update \
