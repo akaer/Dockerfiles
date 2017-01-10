@@ -110,10 +110,10 @@ RUN set -xe \
 
 RUN set -xe \
     && curl -sSL \
-        "https://github.com/akaer/phpipam/archive/php-5.6-fix.tar.gz" \
+        "https://github.com/phpipam/phpipam/archive/master.tar.gz" \
         -o /tmp/phpipam.tar.gz \
     && tar xzf /tmp/phpipam.tar.gz -C /tmp \
-    && mv /tmp/phpipam-php-5.6-fix /var/lib/nginx/html/phpipam \
+    && mv /tmp/phpipam-master /var/lib/nginx/html/phpipam \
     && rm -f /tmp/phpipam.tar.gz
 
 ADD files/phpinfo.php /var/lib/nginx/html/phpipam/phpinfo.php
