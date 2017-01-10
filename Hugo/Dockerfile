@@ -27,7 +27,7 @@
 FROM akaer/base
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
-ENV HUGO_VERSION 0.17
+ENV HUGO_VERSION 0.18.1
 
 RUN set -ex \
     && apk update \
