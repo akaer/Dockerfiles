@@ -22,7 +22,7 @@
 FROM golang:alpine
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
-ENV GOVC_VERSION v0.10.0
+ENV GOVC_VERSION v0.12.1
 
 RUN set -ex \
     && apk add --no-cache \
