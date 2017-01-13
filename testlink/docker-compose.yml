@@ -1,0 +1,55 @@
+version: '2'
+services:
+    mysql:
+        build: db
+        restart: always
+        container_name: testlink_mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: P@ssw0rd
+            MYSQL_PASSWORD: P@ssw0rd
+            MYSQL_USER: testlink
+            MYSQL_DATABASE: testlink_db
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - testlink-data:/var/lib/mysql
+        networks:
+            - testlink
+    web:
+        build: web
+        restart: always
+        container_name: testlink_web
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+        environment:
+            MYSQL_DB_NAME: testlink_db
+            MYSQL_DB_USERNAME: testlink
+            MYSQL_DB_PASSWORD: P@ssw0rd
+            MYSQL_DB_HOSTNAME: mysql
+            MYSQL_DB_PORT: 3306
+        ports:
+            - "8080:80"
+        depends_on:
+            - mysql
+        networks:
+            - testlink
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            - PMA_ARBITRARY=1
+        restart: always
+        ports:
+            - "8081:80"
+        depends_on:
+            - mysql
+        networks:
+            - testlink
+
+volumes:
+    testlink-data:
+        driver: local
+
+networks:
+    testlink:
+        driver: bridge
+
