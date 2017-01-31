@@ -10,7 +10,7 @@
 #
 # Run:
 #
-#  1. Create data container that holds wiki data:
+#  1. Create data container that holds webapp data:
 #
 #  sudo docker create \
 #  -v /var/lib/nginx/html/generatedata \
