@@ -17,7 +17,7 @@
 #   akaer/guac-mysql
 #
 #
-FROM mysql
+FROM mysql:5.7
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
 ADD files/initdb.sql /docker-entrypoint-initdb.d
