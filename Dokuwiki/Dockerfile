@@ -90,24 +90,34 @@ RUN set -xe \
     && tar --transform='s#^dokuwiki-\([^/]*\)#var/lib/nginx/html/dokuwiki#' -xzf /tmp/dokuwiki.tar.gz \
     && rm -f /tmp/dokuwiki.tar.gz \
     && cd /var/lib/nginx/html/dokuwiki/lib/plugins/ \
+
     # bring in bureaucracy plugin (https://www.dokuwiki.org/plugin:bureaucracy)
     && mkdir bureaucracy \
     && curl -sSL \
         "https://github.com/splitbrain/dokuwiki-plugin-bureaucracy/tarball/master" -o /tmp/bureaucracy-plugin.tar.gz \
     && tar xvzf /tmp/bureaucracy-plugin.tar.gz -C bureaucracy --strip-components=1 \
     && rm -f /tmp/bureaucracy-plugin.tar.gz \
+
     # bring in do plugin (https://www.dokuwiki.org/plugin:do)
     && mkdir do \
     && curl -sSL \
         "https://github.com/cosmocode/do/tarball/master" -o /tmp/do.tar.gz \
     && tar xvzf /tmp/do.tar.gz -C do --strip-components=1 \
     && rm -f /tmp/do.tar.gz \
+
     # bring in sqlite plugin (https://github.com/cosmocode/sqlite/tarball/master)
     && mkdir sqlite \
     && curl -sSL \
         "https://github.com/cosmocode/sqlite/tarball/master" -o /tmp/sqlite.tar.gz \
     && tar xvzf /tmp/sqlite.tar.gz -C sqlite --strip-components=1 \
     && rm -f /tmp/sqlite.tar.gz \
+
+    # bring in pagemod plugin (https://github.com/rendezz/dokuwiki-pagemod/archive/master.zip)
+    && mkdir pagemod \
+    && curl -sSL \
+        "https://github.com/rendezz/dokuwiki-pagemod/tarball/master" -o /tmp/pagemod.tar.gz \
+    && tar xvzf /tmp/pagemod.tar.gz -C pagemod --strip-components=1 \
+    && rm -f /tmp/pagemod.tar.gz \
 
     && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/data \
     && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/conf \
