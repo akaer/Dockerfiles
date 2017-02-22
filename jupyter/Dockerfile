@@ -68,14 +68,16 @@ RUN set -xe \
     && pip2 install cx_oracle \
     && pip2 install pyodbc \
     && pip2 install xlwt \
-    && pip2 install XlsxWriter
+    && pip2 install XlsxWriter \
+    && pip2 install wordcloud
 
 RUN set -xe \
     && pip install --upgrade pip \
     && pip install cx_oracle \
     && pip install pyodbc \
-    && pip2 install xlwt \
-    && pip2 install XlsxWriter
+    && pip install xlwt \
+    && pip install XlsxWriter \
+    && pip install wordcloud
 
 CMD [ "start-notebook.sh", "--NotebookApp.token=''" ]
 
