@@ -14,6 +14,7 @@
 #       --name mssql-server-linux \
 #       -p 1433:1433 \
 #       -v /etc/localtime:/etc/localtime:ro \
+#       -v $(pwd)/t1:/var/opt/mssql \
 #       akaer/mssql-server-linux
 #
 #
