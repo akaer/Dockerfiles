@@ -10,7 +10,7 @@
 #
 # Run:
 #
-#  1. Create data container that holds wiki data:
+#  1. Create data container that holds the data:
 #
 #  sudo docker create \
 #  -v /var/lib/nginx/html/mantisbt \
@@ -40,6 +40,9 @@
 #   -v $(pwd):/backup akaer/mantisbt \
 #   bash -c "tar xvzf /backup/<BACKUP_FILE>"
 #
+#
+# Default user: administrator / root
+#
 
 FROM akaer/base
 MAINTAINER André Raabe <andre.raabe@gmail.com>
@@ -49,8 +52,8 @@ ENV MYSQL_DB_USERNAME mantisbt
 ENV MYSQL_DB_PASSWORD P@ssw0rd
 ENV MYSQL_DB_NAME mantisbt_db
 ENV MYSQL_DB_PORT 3306
-ENV MANTISBT_VER 2.0.0
-ENV MANTISBT_MD5 662c40b623922a138b02fa4582a317c5
+ENV MANTISBT_VER 2.3.1
+ENV MANTISBT_MD5 39b6c79d7b6379b02103efd97ee43edc
 
 RUN set -xe \
     && apk update \

@@ -1,3 +1,9 @@
+#
+# docker-compose for mantisbt
+#
+# Default user: administrator / root
+#
+
 version: '2'
 services:
     mysql:
