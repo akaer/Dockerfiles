@@ -46,9 +46,9 @@ RUN set -xe \
     && rm -rf /var/cache/apk/*
 
 RUN set -xe \
-    && curl -sSL "https://download-cf.jetbrains.com/python/pycharm-community-2016.3.tar.gz" -o /tmp/pycharm.tar.gz \
+    && curl -sSL "https://download.jetbrains.com/python/pycharm-community-2017.1.tar.gz" -o /tmp/pycharm.tar.gz \
     && tar -xzf /tmp/pycharm.tar.gz \
     && rm -f /tmp/pycharm.tar.gz
 
-CMD [ "/pycharm-community-2016.3/bin/pycharm.sh" ]
+CMD [ "/pycharm-community-2017.1/bin/pycharm.sh" ]
 
