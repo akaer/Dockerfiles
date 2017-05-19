@@ -22,7 +22,7 @@
 FROM microsoft/mssql-server-linux:latest
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
-ENV SQL_SERVER_AGENT mssql-server-agent_14.0.500.272-2_amd64.deb
+ENV SQL_SERVER_AGENT mssql-server-agent_14.0.600.250-2_amd64.deb
 ENV SA_PASSWORD=visa_123
 ENV ACCEPT_EULA=Y
 ENV container=docker
