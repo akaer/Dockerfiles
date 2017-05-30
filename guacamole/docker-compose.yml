@@ -45,18 +45,18 @@ services:
             - guacd
         networks:
             - guac
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
-        environment:
-            - PMA_ARBITRARY=1
-        restart: always
-        ports:
-            - "8081:80"
-        depends_on:
-            - mysql
-        networks:
-            - guac
+#    phpmyadmin:
+#        image: phpmyadmin/phpmyadmin
+#        container_name: phpmyadmin
+#        environment:
+#            - PMA_ARBITRARY=1
+#        restart: always
+#        ports:
+#            - "8081:80"
+#        depends_on:
+#            - mysql
+#        networks:
+#            - guac
 
 volumes:
     guac-data:
