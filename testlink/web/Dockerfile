@@ -53,8 +53,6 @@ ENV MYSQL_DB_USERNAME testlink
 ENV MYSQL_DB_PASSWORD P@ssw0rd
 ENV MYSQL_DB_NAME testlink_db
 ENV MYSQL_DB_PORT 3306
-ENV TESTLINK_VER 1.9.15
-ENV TESTLINK_MD5 ba9d53dce4f1aac3c69a0d7d426a4e06
 
 ENV COMPANYNAME MyCompany
 ENV SMTPRELAY relay.mycompany.com
@@ -113,12 +111,11 @@ RUN set -xe \
 
 RUN set -xe \
     && curl -sSL \
-        "https://github.com/TestLinkOpenSourceTRMS/testlink-code/archive/${TESTLINK_VER}.tar.gz" \
-        -o /tmp/testlink-${TESTLINK_VER}.tar.gz \
+        "https://github.com/TestLinkOpenSourceTRMS/testlink-code/archive/testlink_1_9.tar.gz" \
+        -o /tmp/testlink.tar.gz \
     && cd /tmp \
-    && echo "${TESTLINK_MD5}  testlink-${TESTLINK_VER}.tar.gz" | md5sum -c \
-    && tar xzf /tmp/testlink-${TESTLINK_VER}.tar.gz -C /tmp \
-    && mv /tmp/testlink-code-${TESTLINK_VER} /var/lib/nginx/html/testlink \
+    && tar xzf /tmp/testlink.tar.gz -C /tmp \
+    && mv /tmp/testlink-code-testlink_1_9 /var/lib/nginx/html/testlink \
     && rm -f /tmp/testlink-${TESTLINK_VER}.tar.gz
 
 ADD files/phpinfo.php /var/lib/nginx/html/testlink/phpinfo.php
