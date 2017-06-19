@@ -8,7 +8,7 @@ $g_smtp_host = '@@SMTPRELAY@@';
 $g_tl_admin_email = '@@ADMINEMAIL@@';
 $g_from_email = '@@DEFAULTSENDERADDRESS@@';
 $g_return_path_email = '@@DEFAULTSENDERADDRESS@@';
-/*
+
 $tlCfg->authentication['method'] = 'LDAP';
 $tlCfg->authentication['ldap'][1]['ldap_server'] = '10.10.206.206';
 $tlCfg->authentication['ldap'][1]['ldap_port'] = '389';
@@ -18,4 +18,3 @@ $tlCfg->authentication['ldap'][1]['ldap_tls'] = false;
 $tlCfg->authentication['ldap'][1]['ldap_uid_field'] = 'sAMAccountName';
 
 $tlCfg->authentication['ldap_automatic_user_creation'] = true;
-*/

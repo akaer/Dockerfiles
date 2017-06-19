@@ -26,25 +26,16 @@ services:
             MYSQL_DB_PASSWORD: P@ssw0rd
             MYSQL_DB_HOSTNAME: mysql
             MYSQL_DB_PORT: 3306
+            COMPANYNAME: MyCompany
+            SMTPRELAY: relay.mycompany.com
+            ADMINEMAIL: testlink-admin@mycompany.com
+            DEFAULTSENDERADDRESS: noreply-testlink@mycompany.com
         ports:
             - "8080:80"
         depends_on:
             - mysql
         networks:
             - testlink
-    phpmyadmin:
-        image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
-        environment:
-            - PMA_ARBITRARY=1
-        restart: always
-        ports:
-            - "8081:80"
-        depends_on:
-            - mysql
-        networks:
-            - testlink
-
 volumes:
     testlink-data:
         driver: local
