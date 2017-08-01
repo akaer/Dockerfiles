@@ -26,10 +26,10 @@ services:
             MYSQL_DB_PASSWORD: P@ssw0rd
             MYSQL_DB_HOSTNAME: mysql
             MYSQL_DB_PORT: 3306
-            COMPANYNAME: MyCompany
-            SMTPRELAY: relay.mycompany.com
-            ADMINEMAIL: testlink-admin@mycompany.com
-            DEFAULTSENDERADDRESS: noreply-testlink@mycompany.com
+            COMPANYNAME: OneIdentity
+            SMTPRELAY: relay.quest.com
+            ADMINEMAIL: andre.raabe@oneidentity.com
+            DEFAULTSENDERADDRESS: noreply-testlink@oneidentity.com
         ports:
             - "8080:80"
         depends_on:
