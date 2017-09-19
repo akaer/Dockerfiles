@@ -13,11 +13,12 @@
 #  sudo docker run -d \
 #   --name jupyter \
 #   -v /etc/localtime:/etc/localtime:ro \
+#   -v $(pwd)/notebooks:/notebooks \
 #   -p 8888:8888 akaer/jupyter
 #
 
 FROM jupyter/scipy-notebook
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
 ENV ORACLE_HOME "/usr/lib/oracle/12.1/client64"
 ENV LD_LIBRARY_PATH "/usr/lib/oracle/12.1/client64:$LD_LIBRARY_PATH"
@@ -63,13 +64,13 @@ RUN set -xe \
 
 USER $NB_USER
 
-RUN set -xe \
-    && pip2 install --upgrade pip \
-    && pip2 install cx_oracle \
-    && pip2 install pyodbc \
-    && pip2 install xlwt \
-    && pip2 install XlsxWriter \
-    && pip2 install wordcloud
+#RUN set -xe \
+#    && pip2 install --upgrade pip \
+#    && pip2 install cx_oracle \
+#    && pip2 install pyodbc \
+#    && pip2 install xlwt \
+#    && pip2 install XlsxWriter \
+#    && pip2 install wordcloud
 
 RUN set -xe \
     && pip install --upgrade pip \
@@ -80,4 +81,3 @@ RUN set -xe \
     && pip install wordcloud
 
 CMD [ "start-notebook.sh", "--NotebookApp.token=''" ]
-
