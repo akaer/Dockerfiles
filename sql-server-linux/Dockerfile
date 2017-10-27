@@ -15,6 +15,7 @@
 #       -p 1433:1433 \
 #       -v /etc/localtime:/etc/localtime:ro \
 #       -v $(pwd)/t1:/var/opt/mssql \
+#       -h sqlserver1 \
 #       akaer/mssql-server-linux
 #
 #
@@ -22,7 +23,7 @@
 FROM microsoft/mssql-server-linux:latest
 MAINTAINER André Raabe <andre.raabe@gmail.com>
 
-ENV SQL_SERVER_AGENT mssql-server-agent_14.0.600.250-2_amd64.deb
+ENV SQL_SERVER_AGENT mssql-server-agent_14.0.900.75-1_amd64.deb
 ENV SA_PASSWORD=visa_123
 ENV ACCEPT_EULA=Y
 ENV container=docker
