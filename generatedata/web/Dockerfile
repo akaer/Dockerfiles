@@ -56,24 +56,24 @@ RUN set -xe \
         curl \
         git \
         nginx \
-        php5 \
-        php5-cli \
-        php5-fpm \
-        php5-gd \
-        php5-gettext \
-        php5-gmp \
-        php5-json \
-        php5-ldap \
-        php5-mcrypt \
-        php5-openssl \
-        php5-pcntl \
-        php5-mysqli \
-        php5-pear \
-        php5-pear-net_idna2 \
-        php5-pear-net_socket \
-        php5-sockets \
-        php5-xml \
-        php5-zlib \
+        php7 \
+        php7-cli \
+        php7-fpm \
+        php7-gd \
+        php7-gettext \
+        php7-gmp \
+        php7-json \
+        php7-ldap \
+        php7-mcrypt \
+        php7-openssl \
+        php7-pcntl \
+        php7-mysqli \
+        php7-pear \
+        php7-pear-net_idna2 \
+        php7-pear-net_socket \
+        php7-sockets \
+        php7-xml \
+        php7-zlib \
         tar \
     && rm -rf /var/cache/apk/* \
     && mkdir /tmp/nginx
@@ -83,12 +83,12 @@ ADD files/run.sh /tmp/run.sh
 
 RUN set -xe \
     && sed -i 's/nginx:x:100:101/nginx:x:1000:101/g' /etc/passwd \
-    && sed -i 's/memory_limit = .*/memory_limit = 768M/' /etc/php5/php.ini \
-    && sed -i 's/post_max_size = .*/post_max_size = 50M/' /etc/php5/php.ini \
-    && echo 'date.timezone = "Europe/Berlin"' >> /etc/php5/php.ini \
-    && sed -i '/^user/c \user = nginx' /etc/php5/php-fpm.conf \
-    && sed -i '/^group/c \group = nginx' /etc/php5/php-fpm.conf \
-    && sed -i 's/^listen.allowed_clients/;listen.allowed_clients/' /etc/php5/php-fpm.conf \
+    && sed -i 's/memory_limit = .*/memory_limit = 768M/' /etc/php7/php.ini \
+    && sed -i 's/post_max_size = .*/post_max_size = 50M/' /etc/php7/php.ini \
+    && echo 'date.timezone = "Europe/Berlin"' >> /etc/php7/php.ini \
+    && sed -i '/^user/c \user = nginx' /etc/php7/php-fpm.conf \
+    && sed -i '/^group/c \group = nginx' /etc/php7/php-fpm.conf \
+    && sed -i 's/^listen.allowed_clients/;listen.allowed_clients/' /etc/php7/php-fpm.conf \
     && chmod +x /tmp/run.sh
 
 RUN set -xe \
