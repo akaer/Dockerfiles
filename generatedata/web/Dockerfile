@@ -1,7 +1,7 @@
 #
 # Docker image for
 #
-# generatedata (http://generatedata.net/)
+# generatedata (http://generatedata.com)
 #
 #
 # Create:
