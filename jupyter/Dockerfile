@@ -18,7 +18,7 @@
 #
 
 FROM jupyter/scipy-notebook
-LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV ORACLE_HOME "/usr/lib/oracle/12.1/client64"
 ENV LD_LIBRARY_PATH "/usr/lib/oracle/12.1/client64:$LD_LIBRARY_PATH"
