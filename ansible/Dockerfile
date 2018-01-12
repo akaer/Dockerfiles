@@ -38,6 +38,7 @@ RUN set -xe \
         openssl-dev \
         py2-pip \
         python-dev \
+        make \
         ' \
     && apk update \
     && apk add --no-cache \
@@ -69,8 +70,8 @@ RUN set -xe \
         setuptools \
         six \
         xmltodict \
-    && apk del --purge ${builddeps} \
     && rm -r /root/.cache \
+    && apk del --no-cache --verbose --purge make gcc py2-pip \
     && rm -rf /var/cache/apk/*
 
 USER $ANSIBLE_USER
