@@ -20,7 +20,7 @@
 #
 
 FROM akaer/base
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV ANSIBLE_USER ansi
 ENV ANSIBLE_HOME /home/${ANSIBLE_USER}

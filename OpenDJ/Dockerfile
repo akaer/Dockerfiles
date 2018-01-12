@@ -23,7 +23,7 @@
 #
 
 FROM akaer/openjre8
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV OPENDJ_HOSTNAME opendj.ldap-lab.com
 ENV OPENDJ_USER opendj

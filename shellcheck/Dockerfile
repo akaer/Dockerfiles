@@ -18,7 +18,7 @@
 #
 
 FROM koalaman/shellcheck
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV SHELLCHECK_USER sshck
 ENV SHELLCHECK_HOME /home/${SHELLCHECK_USER}

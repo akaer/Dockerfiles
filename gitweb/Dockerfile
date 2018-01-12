@@ -23,7 +23,7 @@
 #
 
 FROM akaer/base
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV GIT_BASE_URL my-git-server
 ENV WEB_BASE_URL http://my-web-server:8888/

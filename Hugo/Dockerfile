@@ -25,7 +25,7 @@
 #
 
 FROM akaer/base
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV HUGO_VERSION 0.27.1
 

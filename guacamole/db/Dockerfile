@@ -18,7 +18,7 @@
 #
 #
 FROM mysql:5.7
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ADD files/initdb.sql /docker-entrypoint-initdb.d
 

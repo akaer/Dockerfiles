@@ -19,7 +19,7 @@
 #
 
 FROM akaer/openjre8
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV LT_VERSION 3.6
 

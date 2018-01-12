@@ -17,7 +17,7 @@
 #
 
 FROM akaer/base
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -xe \
     && apk update \

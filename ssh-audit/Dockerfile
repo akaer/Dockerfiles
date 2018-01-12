@@ -21,7 +21,7 @@
 #
 
 FROM akaer/python
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ARG BRANCH_TO_USE=master
 

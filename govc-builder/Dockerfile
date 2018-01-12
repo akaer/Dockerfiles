@@ -20,7 +20,7 @@
 #
 
 FROM golang:alpine
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV GOVC_VERSION v0.12.1
 

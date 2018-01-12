@@ -19,7 +19,7 @@
 #
 
 FROM akaer/x11-novnc-java
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV LANG C.UTF-8
 ENV SCREEN_RESOLUTION 1024x768

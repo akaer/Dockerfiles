@@ -18,7 +18,7 @@
 #
 
 FROM akaer/python3
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 
 RUN set -ex \

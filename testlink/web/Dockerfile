@@ -46,7 +46,7 @@
 #
 
 FROM akaer/base
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV MYSQL_DB_HOSTNAME localhost
 ENV MYSQL_DB_USERNAME testlink

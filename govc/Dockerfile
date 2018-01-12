@@ -19,7 +19,7 @@
 #
 
 FROM alpine:latest
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV GOVC_INSECURE true
 ENV GOVC_URL https://user:password@vsphere-ip-or-hostname/sdk

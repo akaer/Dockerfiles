@@ -29,7 +29,7 @@
 
 
 FROM jenkins:alpine
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -xe \
     && install-plugins.sh \

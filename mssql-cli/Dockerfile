@@ -17,7 +17,7 @@
 #
 
 FROM ubuntu:16.04
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
     && apt-get update \

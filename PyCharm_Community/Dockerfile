@@ -19,7 +19,7 @@
 #
 
 FROM akaer/openjre8
-MAINTAINER André Raabe <andre.raabe@gmail.com>
+LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -xe \
     && apk update \
