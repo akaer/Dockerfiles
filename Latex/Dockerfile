@@ -20,7 +20,8 @@
 #   akaer/latex pdflatex <your-tex-file>
 #
 
-FROM ubuntu:16.04
+#FROM ubuntu:16.04
+FROM debian:buster-slim
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -33,7 +34,7 @@ RUN set -xe \
     && apt-get install -y \
     aspell \
     aspell-de \
-    aspell-de-alt \
+#    aspell-de-alt \
     aspell-en \
     software-properties-common \
     texlive-fonts-recommended \
