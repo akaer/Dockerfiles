@@ -20,10 +20,10 @@
 #
 #
 
-FROM microsoft/mssql-server-linux:latest
+FROM microsoft/mssql-server-linux:2017-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-ENV SQL_SERVER_AGENT mssql-server-agent_14.0.900.75-1_amd64.deb
+ENV SQL_SERVER_AGENT mssql-server-agent_14.0.3015.40-1_amd64.deb
 ENV SA_PASSWORD=visa_123
 ENV ACCEPT_EULA=Y
 ENV container=docker
@@ -36,7 +36,7 @@ RUN set -xe \
     && apt-get install -y \
         curl \
     && rm -rf /var/lib/apt/lists/* \
-    && curl -sSL https://packages.microsoft.com/ubuntu/16.04/mssql-server/pool/main/m/mssql-server-agent/${SQL_SERVER_AGENT} -o /tmp/mssql-server-agent.deb \
+    && curl -sSL https://packages.microsoft.com/ubuntu/16.04/mssql-server-2017/pool/main/m/mssql-server-agent/${SQL_SERVER_AGENT} -o /tmp/mssql-server-agent.deb \
     && dpkg-deb -x /tmp/mssql-server-agent.deb /tmp/t1 \
     && mv /tmp/t1/opt/mssql/lib/sqlagent.sfp /opt/mssql/lib/ \
     && rm -rf /tmp/t1 \
