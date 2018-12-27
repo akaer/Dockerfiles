@@ -54,6 +54,7 @@ RUN set -xe \
         util-linux \
         ${builddeps} \
     && python -m ensurepip \
+    && pip install --upgrade pip \
     && rm -r /usr/lib/python*/ensurepip \
     && pip install --upgrade \
         ansible \
@@ -66,7 +67,6 @@ RUN set -xe \
         pysphere \
         PyVmomi \
         pywinrm \
-        PyYAML \
         setuptools \
         six \
         xmltodict \
