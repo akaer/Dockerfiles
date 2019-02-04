@@ -14,6 +14,8 @@ chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/conf
 chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/lib/plugins
 chown nginx:nginx -R /var/lib/nginx/tmp/
 
-php-fpm5 -D -c /etc/php5/php.ini -y /etc/php5/php-fpm.conf -d variables_order="EGPCS"
+sed -i 's|nobody|nginx|g' /etc/php7/php-fpm.d/www.conf
+
+php-fpm7 -D -c /etc/php7/php.ini -y /etc/php7/php-fpm.conf -d variables_order="EGPCS"
 nginx -g "daemon off;"
 

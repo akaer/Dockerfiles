@@ -55,6 +55,8 @@ RUN set -xe \
         nginx \
         php7 \
         php7-fpm \
+        php7-session \
+        php7-mbstring \
         php7-gd \
         php7-json \
         php7-openssl \
