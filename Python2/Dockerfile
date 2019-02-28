@@ -27,7 +27,11 @@ RUN set -ex \
     && rm -r /usr/lib/python*/ensurepip \
     && pip install --upgrade pip setuptools \
     && rm -r /root/.cache \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/cache/apk/* \
+    && echo "import rlcompleter, readline" >~/.pythonrc \
+    && echo "readline.parse_and_bind('tab:complete')" >> ~/.pythonrc
+
+ENV PYTHONSTARTUP /root/.pythonrc
 
 CMD [ "python", "--version" ]
 
