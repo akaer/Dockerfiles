@@ -24,8 +24,12 @@ RUN set -ex \
     && apk add --no-cache \
         git \
     && git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap \
+    && pip install requests ipdb \
     && apk del --purge git \
     && rm -rf /var/cache/apk/*
+
+VOLUME [ "/data" ]
+VOLUME [ "/root/.sqlmap" ]
 
 ENTRYPOINT [ "python", "sqlmap/sqlmap.py" ]
 
