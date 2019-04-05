@@ -20,7 +20,7 @@
 #
 #
 
-FROM microsoft/mssql-server-linux:2017-latest
+FROM mcr.microsoft.com/mssql/server:2017-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV SA_PASSWORD=visa_123
