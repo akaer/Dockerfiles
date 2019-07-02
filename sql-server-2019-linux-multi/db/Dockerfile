@@ -17,6 +17,7 @@ RUN set -ex \
     && apt-get upgrade -y \
     && apt-get install -y \
         coreutils \
+        inetutils-ping \
         less \
         net-tools \
         tree \

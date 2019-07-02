@@ -14,6 +14,8 @@ replace_vars() {
     local -r DSTFILE="${1}"; shift
 
     sed -i -e "s|@@HOSTNAME@@|${HOSTNAME}|" \
+           -e "s|@@IP@@|$(/sbin/ifconfig eth0 |awk '/inet addr/ { gsub(".*:", "", $2) ; print $2 }')|" \
+           -e "s|@@NETMASK@@|$(/sbin/ifconfig eth0 |awk '/Mask/ { gsub(".*:", "", $4) ; print $4 }')|" \
         "${DSTFILE}"
 }
 
