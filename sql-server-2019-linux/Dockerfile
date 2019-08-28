@@ -1,7 +1,7 @@
 #
 # Docker image for
 #
-# Microsoft SQL Server
+# Microsoft SQL Server 2019
 #
 #
 # Create:
@@ -29,6 +29,8 @@ LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV SA_PASSWORD=visa_123
 ENV MSSQL_PID=Developer
+ENV MSSQL_ENABLE_HADR=1
+ENV MSSQL_AGENT_ENABLED=true
 ENV ACCEPT_EULA=Y
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
