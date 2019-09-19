@@ -15,6 +15,7 @@
 # sudo docker run --rm=true -it \
 #   --name klaros \
 #   -v /etc/localtime:/etc/localtime:ro \
+#   -v $(pwd)/data:/klaros-data \
 #   -p 18080:18080 \
 #   akaer/klaros
 #
@@ -23,7 +24,7 @@ FROM openjdk:8u212-alpine
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 # Set Klaros language. Use 'deu' for german and 'eng' for english.
-ARG KLAROS_LANG=deu
+ARG KLAROS_LANG=eng
 ARG TOMCAT_HTTP_PORT
 ARG TOMCAT_SERVER_PORT
 ARG TOMCAT_AJP_PORT
