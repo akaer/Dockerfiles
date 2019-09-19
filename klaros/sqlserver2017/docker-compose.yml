@@ -1,0 +1,54 @@
+---
+version: '3'
+services:
+    db:
+        image: mssql-2017
+        build: db
+        restart: always
+        container_name: db1
+        hostname: db1
+        environment:
+            SA_PASSWORD: P@ssw0rd
+            MSSQL_PID: Developer
+            ACCEPT_EULA: Y
+            MSSQL_AGENT_ENABLED: 'true'
+            MSSQL_ENABLE_HADR: 1
+            MSSQL_BACKUP_DIR: '/backup'
+            MSSQL_RPC_PORT: 135
+            MSSQL_DTC_TCP_PORT: 51000
+            TZ: Europe/Berlin
+            LANG: en_US.UTF-8
+            LANGUAGE: en_US:en
+            LC_ALL: en_US.UTF-8
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./data_db1:/var/opt/mssql
+            - ./backup:/backup
+        ports:
+            - "10001:1433"
+            - "20001:5022"
+            - "30001:135"
+            - "40001:51000"
+        networks:
+            - sqlserver-net
+
+    klaros:
+        image: klaros-mssql2017
+        build: klaros
+        restart: always
+        container_name: klaros_mssql2017
+        hostname: klaros
+        environment:
+            SA_PASSWORD: P@ssw0rd
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - ./data_klaros:/klaros-data
+        ports:
+            - "18080:18080"
+        depends_on:
+            - db
+        networks:
+            - sqlserver-net
+
+networks:
+    sqlserver-net:

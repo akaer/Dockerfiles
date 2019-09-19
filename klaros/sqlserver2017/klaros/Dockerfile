@@ -44,6 +44,7 @@ ENV KLAROS_HOME /klaros-data
 EXPOSE ${TOMCAT_HTTP_PORT}
 
 ADD files/auto-install.xml /tmp/auto-install.xml
+ADD files/catalina-wrapper.sh /root/catalina-wrapper.sh
 ADD https://www.klaros-testmanagement.com/files/${KLAROS_VER}/Klaros-${KLAROS_VER}-Setup.jar /tmp/Klaros-Setup.jar
 
 RUN set -ex \
@@ -55,8 +56,12 @@ RUN set -ex \
     && rm -f /tmp/Klaros-Setup.jar \
     && rm -rf /root/klaros-testmanagement/webapps/ROOT \
     && mv /root/klaros-testmanagement/webapps/klaros-web.war \
-        /root/klaros-testmanagement/webapps/ROOT.war
+        /root/klaros-testmanagement/webapps/ROOT.war \
+    && mkdir /klaros-data \
+    && chmod +x /root/catalina-wrapper.sh
 
 VOLUME /klaros-data
 
-CMD [ "/root/klaros-testmanagement/bin/catalina.sh", "run" ]
+CMD [ "/root/catalina-wrapper.sh" ]
+
+
