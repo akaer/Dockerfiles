@@ -38,6 +38,7 @@ ENV TOMCAT_HTTP_PORT ${TOMCAT_HTTP_PORT:-18080}
 ENV TOMCAT_SERVER_PORT ${TOMCAT_SERVER_PORT:-18005}
 ENV TOMCAT_AJP_PORT ${TOMCAT_AJP_PORT:-18009}
 ENV KLAROS_VER ${KLAROS_VER:-4.12.1}
+ENV KLAROS_HOME /klaros-data
 
 EXPOSE ${TOMCAT_HTTP_PORT}
 
@@ -45,21 +46,16 @@ ADD files/auto-install.xml /tmp/auto-install.xml
 ADD https://www.klaros-testmanagement.com/files/${KLAROS_VER}/Klaros-${KLAROS_VER}-Setup.jar /tmp/Klaros-Setup.jar
 
 RUN set -ex \
-    && adduser -g "" -s /bin/sh -D klaros \
     && sed -i "s/@@TOMCAT_ADMIN_PASSWORD@@/${TOMCAT_ADMIN_PASSWORD}/g;s/@@TOMCAT_HTTP_PORT@@/${TOMCAT_HTTP_PORT}/g;s/@@TOMCAT_SERVER_PORT@@/${TOMCAT_SERVER_PORT}/g;s/@@TOMCAT_AJP_PORT@@/${TOMCAT_AJP_PORT}/g;s/@@TOMCAT_SESSION_TIMEOUT@@/${TOMCAT_SESSION_TIMEOUT}/g;s/@@TOMCAT_MEMORY_MAX@@/${TOMCAT_MEMORY_MAX}/g;s/@@TOMCAT_MEMORY_MIN@@/${TOMCAT_MEMORY_MIN}/g;s/@@KLAROS_LANG@@/${KLAROS_LANG}/g" /tmp/auto-install.xml \
     && echo "~~~~~" && cat /tmp/auto-install.xml &&  echo "~~~~~"
 
 RUN set -ex \
     && java -jar /tmp/Klaros-Setup.jar -console /tmp/auto-install.xml \
     && rm -f /tmp/Klaros-Setup.jar \
-    && mkdir /home/klaros/.klaros \
-    && chown -R klaros /home/klaros \
-    && rm -rf /home/klaros/klaros-testmanagement/webapps/ROOT \
-    && mv /home/klaros/klaros-testmanagement/webapps/klaros-web.war \
-        /home/klaros/klaros-testmanagement/webapps/ROOT.war
+    && rm -rf /root/klaros-testmanagement/webapps/ROOT \
+    && mv /root/klaros-testmanagement/webapps/klaros-web.war \
+        /root/klaros-testmanagement/webapps/ROOT.war
 
-USER klaros
+VOLUME /klaros-data
 
-VOLUME /home/klaros/.klaros
-
-CMD [ "/home/klaros/klaros-testmanagement/bin/catalina.sh", "run" ]
+CMD [ "/root/klaros-testmanagement/bin/catalina.sh", "run" ]

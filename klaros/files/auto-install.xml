@@ -4,7 +4,7 @@
 <com.izforge.izpack.panels.info.InfoPanel id="info"/>
 <com.izforge.izpack.panels.licence.LicencePanel id="license"/>
 <com.izforge.izpack.panels.target.TargetPanel id="target">
-<installpath>/home/klaros/klaros-testmanagement</installpath>
+<installpath>/root/klaros-testmanagement</installpath>
 </com.izforge.izpack.panels.target.TargetPanel>
 <com.izforge.izpack.panels.packs.PacksPanel id="packs">
 <pack index="0" name="Tomcat 8 Application Server" selected="true"/>
