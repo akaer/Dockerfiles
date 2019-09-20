@@ -9,7 +9,7 @@ replace_vars() {
 
 echo "[*] Pre customizing sql server"
 
-cp -iv /tmp/mssql.conf /var/opt/mssql/mssql.conf
+cp -v /tmp/mssql.conf /var/opt/mssql/mssql.conf
 replace_vars /var/opt/mssql/mssql.conf
 
 echo "[*] Pre customizing sql server done"
