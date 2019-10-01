@@ -16,7 +16,7 @@
 #       akaer/mssql-cli
 #
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
@@ -30,7 +30,7 @@ RUN set -ex \
         libicu-dev \
         libunwind8 \
         python-pip \
-    && pip install --upgrade pip \
+    && pip install cython \
     && pip install \
         git+https://github.com/pymssql/pymssql.git \
     && pip install \
