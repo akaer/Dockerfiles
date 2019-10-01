@@ -2,7 +2,7 @@
 version: '3'
 services:
     db1:
-        image: mssql-2019
+        image: mssql-2017
         build: db
         restart: always
         container_name: db1
@@ -37,7 +37,7 @@ services:
             - sqlserver-net
     db2:
         build: db
-        image: mssql-2019
+        image: mssql-2017
         restart: always
         container_name: db2
         hostname: db2
@@ -71,7 +71,7 @@ services:
             - sqlserver-net
     db3:
         build: db
-        image: mssql-2019
+        image: mssql-2017
         restart: always
         container_name: db3
         hostname: db3
