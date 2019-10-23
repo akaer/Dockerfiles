@@ -13,15 +13,6 @@ COPY ./*.sql /
 COPY ./mssql.conf /tmp/mssql.conf
 
 RUN set -ex \
-    && apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y \
-        coreutils \
-        less \
-        net-tools \
-        tree \
-    && apt-get autoclean -y \
-    && rm -rf /var/lib/apt/lists/* \
     && chmod +x /*.sh
 
 CMD /bin/bash /entrypoint.sh
