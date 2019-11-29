@@ -16,7 +16,7 @@
 #       -p 1433:1433 \
 #       -p 135:135 \
 #       -p 51999:51999 \
-#       -v /etc/localtime:/etc/localtime:ro \
+#       -u "$(id -u):$(id -g)" \
 #       -v $(pwd)/data:/var/opt/mssql:rw \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
@@ -27,6 +27,7 @@
 FROM mcr.microsoft.com/mssql/server:2019-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
+ENV TZ=Europe/Berlin
 ENV SA_PASSWORD=visa_123
 ENV MSSQL_PID=Developer
 ENV MSSQL_ENABLE_HADR=1
@@ -35,4 +36,3 @@ ENV ACCEPT_EULA=Y
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
-
