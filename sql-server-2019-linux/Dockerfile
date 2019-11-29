@@ -16,13 +16,17 @@
 #       -p 1433:1433 \
 #       -p 135:135 \
 #       -p 51999:51999 \
-#       -u "$(id -u):$(id -g)" \
+#       -u $(id -u):0 \
 #       -v $(pwd)/data:/var/opt/mssql:rw \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
 #       akaer/mssql-server-2019-linux
 #
+
 #
+# If you have to run as root use "-u 0:0" instead
+#
+
 
 FROM mcr.microsoft.com/mssql/server:2019-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
