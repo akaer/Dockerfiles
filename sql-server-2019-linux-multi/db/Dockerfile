@@ -8,6 +8,8 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+USER root
+
 COPY ./*.sh /
 COPY ./*.sql /
 COPY ./mssql.conf /tmp/mssql.conf
@@ -24,6 +26,8 @@ RUN set -ex \
     && apt-get autoclean -y \
     && rm -rf /var/lib/apt/lists/* \
     && chmod +x /*.sh
+
+USER mssql
 
 CMD /bin/bash /entrypoint.sh
 

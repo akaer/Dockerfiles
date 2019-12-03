@@ -8,6 +8,7 @@ services:
         container_name: db1
         hostname: db1
         dns: 10.10.206.206
+        user: root
         environment:
             SA_PASSWORD: P@ssw0rd
             MSSQL_PID: Developer
@@ -43,6 +44,7 @@ services:
         container_name: db2
         hostname: db2
         dns: 10.10.206.206
+        user: root
         environment:
             SA_PASSWORD: P@ssw0rd
             MSSQL_PID: Developer
@@ -77,6 +79,7 @@ services:
         container_name: db3
         hostname: db3
         dns: 10.10.206.206
+        user: root
         environment:
             SA_PASSWORD: P@ssw0rd
             MSSQL_PID: Developer
