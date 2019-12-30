@@ -36,8 +36,7 @@ RUN set -xe \
         libffi-dev \
         musl-dev \
         openssl-dev \
-        py2-pip \
-        python-dev \
+        python3-dev \
         make \
         ' \
     && apk update \
@@ -47,16 +46,17 @@ RUN set -xe \
         curl \
         krb5 \
         krb5-libs \
-        py-httplib2 \
-        py-jinja2 \
-        py-paramiko \
-        py-yaml \
+        python3 \
+        py3-httplib2 \
+        py3-jinja2 \
+        py3-paramiko \
+        py3-yaml \
         util-linux \
         ${builddeps} \
-    && python -m ensurepip \
-    && pip install --upgrade pip \
+    && python3 -m ensurepip \
+    && pip3 install --upgrade pip \
     && rm -r /usr/lib/python*/ensurepip \
-    && pip install --upgrade \
+    && pip3 install --upgrade \
         ansible \
         httplib2 \
         jinja2 \
@@ -71,7 +71,7 @@ RUN set -xe \
         six \
         xmltodict \
     && rm -r /root/.cache \
-    && apk del --no-cache --verbose --purge make gcc py2-pip \
+    && apk del --no-cache --verbose --purge make gcc \
     && rm -rf /var/cache/apk/*
 
 USER $ANSIBLE_USER
