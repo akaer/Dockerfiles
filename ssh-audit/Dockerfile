@@ -20,7 +20,7 @@
 #       akaer/ssh-audit
 #
 
-FROM akaer/python
+FROM akaer/python3
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ARG BRANCH_TO_USE=master
@@ -29,10 +29,10 @@ RUN set -ex \
     && apk update \
     && apk add --no-cache \
         git \
-    && git clone https://github.com/arthepsy/ssh-audit \
+    && git clone https://github.com/jtesta/ssh-audit \
     && cd ssh-audit && git checkout ${BRANCH_TO_USE} \
     && apk del --purge git \
     && rm -rf /var/cache/apk/*
 
-ENTRYPOINT [ "python", "ssh-audit/ssh-audit.py" ]
+ENTRYPOINT [ "python3", "ssh-audit/ssh-audit.py" ]
 
