@@ -1,7 +1,7 @@
 #
 # Docker image for
 #
-# Speedtest :-)
+# Ookla Speedtest :-)
 #
 #
 # Create:
@@ -16,21 +16,17 @@
 #       akaer/speedtest
 #
 
-FROM akaer/python3
+FROM akaer/base
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-RUN set -xe \
+RUN set -ex \
     && apk update \
     && apk add --no-cache \
-        git \
-    && rm -rf /var/cache/apk/*
+        curl \
+    && rm -rf /root/.cache \
+    && rm -rf /var/cache/apk/* \
+    && curl -sSL -o speedtest.tgz https://bintray.com/ookla/download/download_file?file_path=ookla-speedtest-1.0.0-armhf-linux.tgz \
+    && tar xzf speedtest.tgz \
+    && rm speedtest.tgz
 
-RUN set -xe \
-    && git clone https://github.com/sivel/speedtest-cli.git /tmp/speedtest-cli
-
-WORKDIR /tmp/speedtest-cli
-
-RUN set -xe \
-    && python3 setup.py install
-
-CMD [ "speedtest-cli" ]
+CMD [ "./speedtest" ]
