@@ -10,21 +10,21 @@
 # Run:
 #
 # sudo docker run --rm=true -it \
-#   --name nmap \
+#   --name nmap --hostname nmap \
 #   -v /etc/localtime:/etc/localtime:ro \
 #   akaer/nmap
 #
 
-FROM debian:buster-slim
+FROM akaer/base
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-RUN set -xe \
-    && apt-get update \
-    && apt-get install -y \
+RUN set -ex \
+    && apk update \
+    && apk add --no-cache \
         nmap \
-        --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/* \
+        nmap-scripts \
+    && rm -rf /var/cache/apk/* \
     && nmap --script-updatedb
 
-CMD [ "nmap", "--version" ]
+CMD [ "nmap" ]
 
