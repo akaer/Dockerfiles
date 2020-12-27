@@ -26,5 +26,5 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* \
     && nmap --script-updatedb
 
-CMD [ "nmap" ]
+ENTRYPOINT [ "nmap" ]
 
