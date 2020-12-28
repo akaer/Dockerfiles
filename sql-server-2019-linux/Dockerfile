@@ -36,3 +36,13 @@ ENV ACCEPT_EULA=Y
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
+
+USER root
+
+RUN set -xe \
+    && apt-get update \
+    && apt-get upgrade -q -y \
+    && rm -rf /var/lib/apt/lists/*
+
+USER mssql
