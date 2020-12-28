@@ -12,11 +12,9 @@
 #
 #  sudo docker run --rm=true -it \
 #       --name mssql-server-2019-linux \
-#       --dns 10.10.206.206 \
 #       -p 1433:1433 \
 #       -p 135:135 \
 #       -p 51999:51999 \
-#       -u $(id -u):0 \
 #       -v $(pwd)/data:/var/opt/mssql:rw \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
@@ -30,7 +28,7 @@ FROM mcr.microsoft.com/mssql/server:2019-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV TZ=Europe/Berlin
-ENV SA_PASSWORD=visa_123
+ENV SA_PASSWORD=P@ssw0rd
 ENV MSSQL_PID=Developer
 ENV MSSQL_ENABLE_HADR=1
 ENV MSSQL_AGENT_ENABLED=true
