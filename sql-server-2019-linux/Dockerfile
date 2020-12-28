@@ -22,11 +22,9 @@
 #       -h sqlserver1 \
 #       akaer/mssql-server-2019-linux
 #
-
-#
+# ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
 #
-
 
 FROM mcr.microsoft.com/mssql/server:2019-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
