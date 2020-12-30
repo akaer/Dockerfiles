@@ -7,15 +7,13 @@ services:
         restart: always
         container_name: db1
         hostname: db1
-        dns: 10.10.206.206
-        user: root
         environment:
             SA_PASSWORD: P@ssw0rd
             MSSQL_PID: Developer
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backup'
+            MSSQL_BACKUP_DIR: '/backups'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -23,15 +21,12 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - /etc/localtime:/etc/localtime:ro
-            - ./data_db1:/var/opt/mssql
-            - ./data_shared:/var/opt/mssql/shared
-            - ./backup:/backup
-            - ./trace_db1:/trace
-            - ./ssl:/ssl
+            - ./data/db1:/var/opt/mssql
+            - ./data/shared:/var/opt/mssql/shared
+            - ./data/backup:/backups
         ports:
+            - "10000:1444"
             - "10001:1433"
-            - "10010:1444"
             - "20001:5022"
             - "30001:135"
             - "40001:51000"
@@ -43,15 +38,13 @@ services:
         restart: always
         container_name: db2
         hostname: db2
-        dns: 10.10.206.206
-        user: root
         environment:
             SA_PASSWORD: P@ssw0rd
             MSSQL_PID: Developer
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backup'
+            MSSQL_BACKUP_DIR: '/backups'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -59,12 +52,9 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - /etc/localtime:/etc/localtime:ro
-            - ./data_db2:/var/opt/mssql
-            - ./data_shared:/var/opt/mssql/shared
-            - ./backup:/backup
-            - ./trace_db2:/trace
-            - ./ssl:/ssl
+            - ./data/db2:/var/opt/mssql
+            - ./data/shared:/var/opt/mssql/shared
+            - ./data/backup:/backups
         ports:
             - "10002:1433"
             - "20002:5022"
@@ -78,15 +68,13 @@ services:
         restart: always
         container_name: db3
         hostname: db3
-        dns: 10.10.206.206
-        user: root
         environment:
             SA_PASSWORD: P@ssw0rd
             MSSQL_PID: Developer
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backup'
+            MSSQL_BACKUP_DIR: '/backups'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -94,12 +82,9 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - /etc/localtime:/etc/localtime:ro
-            - ./data_db3:/var/opt/mssql
-            - ./data_shared:/var/opt/mssql/shared
-            - ./backup:/backup
-            - ./trace_db3:/trace
-            - ./ssl:/ssl
+            - ./data/db3:/var/opt/mssql
+            - ./data/shared:/var/opt/mssql/shared
+            - ./data/backup:/backups
         ports:
             - "10003:1433"
             - "20003:5022"

@@ -1,21 +1,25 @@
 #!/usr/bin/env bash
 
-replace_vars() {
-    local -r DSTFILE="${1}"; shift
+set -Eeuo pipefail
 
-    sed -i -e "s|@@HOSTNAME@@|${HOSTNAME}|" \
-        "${DSTFILE}"
-}
+# global variables
+SCRIPT_ARGS="$@"
+SCRIPT_NAME="$0"
+SCRIPT_NAME="${SCRIPT_NAME#\./}"
+SCRIPT_NAME="${SCRIPT_NAME##/*/}"
+SCRIPT_BASE_DIR="$(cd "$( dirname "$0")" && pwd )"
+
+[[ -e "${SCRIPT_BASE_DIR}/common.inc" ]] && source "${SCRIPT_BASE_DIR}/common.inc"
 
 echo "[*] Pre customizing sql server"
 
+replace_vars /tmp/mssql.conf
 cp -iv /tmp/mssql.conf /var/opt/mssql/mssql.conf
-replace_vars /var/opt/mssql/mssql.conf
 
-openssl req -x509 -nodes -newkey rsa:4096 \
-    -subj '/CN='${HOSTNAME} \
-    -keyout "/ssl/${HOSTNAME}_mssql.key" \
-    -out "/ssl/${HOSTNAME}_mssql.pem" -days 365
+#openssl req -x509 -nodes -newkey rsa:4096 \
+#    -subj '/CN='${HOSTNAME} \
+#    -keyout "/ssl/${HOSTNAME}_mssql.key" \
+#    -out "/ssl/${HOSTNAME}_mssql.pem" -days 365
 
 echo "[*] Pre customizing sql server done"
 

@@ -1,32 +1,35 @@
 #!/usr/bin/env bash
 
-declare -r MAXDELAY=20
+set -Eeuo pipefail
 
-run_sql() {
-    local -r SAUSR="sa"
-    local -r SAPWD="P@ssw0rd"
-    local -r CMD="${1}"; shift
+# global variables
+SCRIPT_ARGS="$@"
+SCRIPT_NAME="$0"
+SCRIPT_NAME="${SCRIPT_NAME#\./}"
+SCRIPT_NAME="${SCRIPT_NAME##/*/}"
+SCRIPT_BASE_DIR="$(cd "$( dirname "$0")" && pwd )"
 
-    /opt/mssql-tools/bin/sqlcmd -S 0.0.0.0 -U "${SAUSR}" -P "${SAPWD}" -i "${CMD}"
-}
+[[ -e "${SCRIPT_BASE_DIR}/common.inc" ]] && source "${SCRIPT_BASE_DIR}/common.inc"
 
-replace_vars() {
-    local -r DSTFILE="${1}"; shift
+declare -r MAXDELAY=30
 
-    sed -i -e "s|@@HOSTNAME@@|${HOSTNAME}|" \
-           -e "s|@@IP@@|$(/sbin/ifconfig eth0 |awk '/inet addr/ { gsub(".*:", "", $2) ; print $2 }')|" \
-           -e "s|@@NETMASK@@|$(/sbin/ifconfig eth0 |awk '/Mask/ { gsub(".*:", "", $4) ; print $4 }')|" \
-        "${DSTFILE}"
-}
+Q=$(cat <<-'_EOF_'
+set nocount on
+select 1
+_EOF_
+)
 
-echo "[*] Start executing sql scripts in ${MAXDELAY} seconds."
-sleep ${MAXDELAY}
+while [[ $(run_sql_query_batch "${Q}" "tempdb") -ne 1 ]]
+do
+    echo "[*] Waiting for SQL Server to accept connections"
+    sleep ${MAXDELAY}
+done
 
-for sf in $(ls -v /*.sql);
+for sf in $(ls -v /tmp/*.sql);
 do
     echo "Execute ${sf}"
     replace_vars "${sf}"
-    run_sql "${sf}"
+    run_sql_file "${sf}"
 done
 
 exit 0

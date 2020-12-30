@@ -13,7 +13,7 @@ services:
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backup'
+            MSSQL_BACKUP_DIR: '/backups'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -21,10 +21,9 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - /etc/localtime:/etc/localtime:ro
             - ./data/db1:/var/opt/mssql
             - ./data/shared:/var/opt/mssql/shared
-            - ./data/backup:/backup
+            - ./data/backup:/backups
         ports:
             - "10001:1433"
             - "20001:5022"
@@ -44,7 +43,7 @@ services:
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backup'
+            MSSQL_BACKUP_DIR: '/backups'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -52,10 +51,9 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - /etc/localtime:/etc/localtime:ro
             - ./data/db2:/var/opt/mssql
             - ./data/shared:/var/opt/mssql/shared
-            - ./data/backup:/backup
+            - ./data/backup:/backups
         ports:
             - "10002:1433"
             - "20002:5022"

@@ -1,4 +1,4 @@
-CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'P@ssw0rd';
+CREATE MASTER KEY ENCRYPTION BY PASSWORD = '@@PASSWORD@@';
 go
 
 CREATE CERTIFICATE AG_@@HOSTNAME@@_Cert
@@ -24,7 +24,7 @@ go
 
 if (@@SERVERNAME = 'db1' )
     begin
-        CREATE LOGIN AG_db2_Login WITH PASSWORD = 'P@ssw0rd';
+        CREATE LOGIN AG_db2_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db2_User FOR LOGIN AG_db2_Login;
 
         CREATE CERTIFICATE AG_db2_Cert
@@ -33,7 +33,7 @@ if (@@SERVERNAME = 'db1' )
 
         GRANT CONNECT ON ENDPOINT::AGEP TO AG_db2_Login;
 
-        CREATE LOGIN AG_db3_Login WITH PASSWORD = 'P@ssw0rd';
+        CREATE LOGIN AG_db3_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db3_User FOR LOGIN AG_db3_Login;
 
         CREATE CERTIFICATE AG_db3_Cert
@@ -45,7 +45,7 @@ if (@@SERVERNAME = 'db1' )
 
 if (@@SERVERNAME = 'db2' )
     begin
-        CREATE LOGIN AG_db1_Login WITH PASSWORD = 'P@ssw0rd';
+        CREATE LOGIN AG_db1_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db1_User FOR LOGIN AG_db1_Login;
 
         CREATE CERTIFICATE AG_db1_Cert
@@ -54,7 +54,7 @@ if (@@SERVERNAME = 'db2' )
 
         GRANT CONNECT ON ENDPOINT::AGEP TO AG_db1_Login;
 
-        CREATE LOGIN AG_db3_Login WITH PASSWORD = 'P@ssw0rd';
+        CREATE LOGIN AG_db3_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db3_User FOR LOGIN AG_db3_Login;
 
         CREATE CERTIFICATE AG_db3_Cert
@@ -66,7 +66,7 @@ if (@@SERVERNAME = 'db2' )
 
 if (@@SERVERNAME = 'db3' )
     begin
-        CREATE LOGIN AG_db2_Login WITH PASSWORD = 'P@ssw0rd';
+        CREATE LOGIN AG_db2_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db2_User FOR LOGIN AG_db2_Login;
 
         CREATE CERTIFICATE AG_db2_Cert
@@ -75,7 +75,7 @@ if (@@SERVERNAME = 'db3' )
 
         GRANT CONNECT ON ENDPOINT::AGEP TO AG_db2_Login;
 
-        CREATE LOGIN AG_db1_Login WITH PASSWORD = 'P@ssw0rd';
+        CREATE LOGIN AG_db1_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db1_User FOR LOGIN AG_db1_Login;
 
         CREATE CERTIFICATE AG_db1_Cert

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
-/init_server.sh \
-    && (nohup /run_sql_statements.sh &) \
+/tmp/init_server.sh \
+    && (nohup /tmp/run_sql_statements.sh &) \
     && /opt/mssql/bin/sqlservr

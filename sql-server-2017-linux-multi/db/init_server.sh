@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-replace_vars() {
-    local -r DSTFILE="${1}"; shift
+set -Eeuo pipefail
 
-    sed -i -e "s|@@HOSTNAME@@|${HOSTNAME}|" \
-        "${DSTFILE}"
-}
+# global variables
+SCRIPT_ARGS="$@"
+SCRIPT_NAME="$0"
+SCRIPT_NAME="${SCRIPT_NAME#\./}"
+SCRIPT_NAME="${SCRIPT_NAME##/*/}"
+SCRIPT_BASE_DIR="$(cd "$( dirname "$0")" && pwd )"
+
+[[ -e "${SCRIPT_BASE_DIR}/common.inc" ]] && source "${SCRIPT_BASE_DIR}/common.inc"
 
 echo "[*] Pre customizing sql server"
 
