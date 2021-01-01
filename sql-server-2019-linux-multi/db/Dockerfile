@@ -27,7 +27,13 @@ RUN set -ex \
         net-tools \
     && apt-get upgrade -q -y \
     && apt-get autoclean -y \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && openssl rand -writerand /root/.rnd \
+    && mkdir -p /home/mssql \
+    && mkdir /tmp/ssl \
+    && mkdir /var/opt/mssql/shared \
+    && chown mssql /home/mssql /tmp/ssl /var/opt/mssql/shared \
+    && cp -iv /root/.rnd /home/mssql/.rnd
 
 USER mssql
 

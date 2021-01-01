@@ -68,3 +68,11 @@ if (@@SERVERNAME = 'db2' )
 
 go
 
+waitfor delay '00:00:05';
+go
+
+if (@@SERVERNAME = 'db1' )
+    begin
+        ALTER AVAILABILITY GROUP [AGName] ADD LISTENER N'AGNameLsn' (WITH IP ((N'@@IP@@', N'@@NETMASK@@')), PORT=1444);
+    end
+go

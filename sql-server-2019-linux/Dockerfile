@@ -15,7 +15,6 @@
 #       -p 1433:1433 \
 #       -p 135:135 \
 #       -p 51999:51999 \
-#       -v $(pwd)/data:/var/opt/mssql:rw \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
 #       akaer/mssql-server-2019-linux
@@ -37,6 +36,8 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 ENV DEBIAN_FRONTEND noninteractive
+
+COPY mssql.conf /var/opt/mssql/mssql.conf
 
 USER root
 

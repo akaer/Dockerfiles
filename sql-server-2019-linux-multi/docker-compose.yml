@@ -21,8 +21,8 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - ./data/db1:/var/opt/mssql
-            - ./data/shared:/var/opt/mssql/shared
+            - shared:/var/opt/mssql/shared
+            - ssl:/tmp/ssl
             - ./data/backup:/backups
         ports:
             - "10000:1444"
@@ -52,8 +52,8 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - ./data/db2:/var/opt/mssql
-            - ./data/shared:/var/opt/mssql/shared
+            - shared:/var/opt/mssql/shared
+            - ssl:/tmp/ssl
             - ./data/backup:/backups
         ports:
             - "10002:1433"
@@ -82,8 +82,8 @@ services:
             LANGUAGE: en_US:en
             LC_ALL: en_US.UTF-8
         volumes:
-            - ./data/db3:/var/opt/mssql
-            - ./data/shared:/var/opt/mssql/shared
+            - shared:/var/opt/mssql/shared
+            - ssl:/tmp/ssl
             - ./data/backup:/backups
         ports:
             - "10003:1433"
@@ -94,3 +94,7 @@ services:
             - sqlserver-net
 networks:
     sqlserver-net:
+
+volumes:
+    shared:
+    ssl:
