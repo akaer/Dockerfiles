@@ -1,7 +1,7 @@
 #
 # Docker image for
 #
-# OpenDJ (Nightly build)
+# OpenDJ
 #
 #
 # Create:
@@ -11,8 +11,8 @@
 # Run:
 #
 #  sudo docker run -d \
+#   -h ldapserver \
 #   --name opendj \
-#   -v /etc/localtime:/etc/localtime:ro \
 #   -p 389:1389 -p 636:1636 akaer/opendj
 #
 # Configure:
@@ -22,66 +22,32 @@
 # HINT: You may want to enable the "Referential Integrity Plugin"
 #
 
-FROM akaer/openjre8
+FROM openidentityplatform/opendj:latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-ENV OPENDJ_HOSTNAME opendj.ldap-lab.com
+ENV DEBIAN_FRONTEND noninteractive
 ENV OPENDJ_USER opendj
-ENV OPENDJ_ADMIN CN=Directory\ Manager
-ENV OPENDJ_BASEDN dc=ldap-lab,dc=com
-ENV OPENDJ_PASSWORD P@ssw0rd
-ENV OPENDJ_NUMBER_OF_TESTUSERS 500
+ENV BASE_DN dc=ldap-lab,dc=com
+ENV ROOT_PASSWORD P@ssw0rd
+ENV PORT 1389
+ENV LDAPS_PORT 1636
 
-# Default options for a small instance. Overrride the environment var
-# OPENDJ_JAVA_ARGS as needed
-ENV OPENDJ_JAVA_ARGS -server -Xmx512m -XX:+UseG1GC
+ADD healthcheck.sh /healthcheck.sh
+ADD entrypoint.sh /entrypoint.sh
+ADD configure.sh /configure.sh
 
-WORKDIR /opt
+HEALTHCHECK --interval=15s --timeout=15s --start-period=30s --retries=10 \
+    CMD /healthcheck.sh || exit 1
 
-# Fetch the latest nightly build
-RUN set -ex \
-    && apk update \
-    && apk add --no-cache \
-        curl \
-    && rm -rf /var/cache/apk/* \
-    && curl -sSL https://github.com/OpenRock/OpenDJ/releases/download/3.0.0/OpenDJ-3.0.0.zip \
-        -o opendj.zip \
-    && unzip opendj.zip \
-    && rm -f opendj.zip
-
-# Creating instance.loc consolidates the writable directories under one root
-# We also create the extensions directory
-# The strategy is the create a skeleton DJ instance under the instances/template directory
-# and use this template to instantiate a new persistent image.
-RUN set -ex \
-    && echo "/opt/opendj/instances/template" > /opt/opendj/instance.loc\
-    && mkdir -p /opt/opendj/instances/template/lib/extensions
+USER root
 
 RUN set -ex \
-    && ./opendj/setup \
-        --cli \
-        --acceptLicense \
-        --ldapPort 1389 \
-        --ldapsPort 1636 \
-        --adminConnectorPort 4444 \
-        --baseDN "${OPENDJ_BASEDN}" \
-        --rootUserDN "${OPENDJ_ADMIN}" \
-        --rootUserPassword "${OPENDJ_PASSWORD}" \
-        --enableStartTLS \
-        --generateSelfSignedCertificate \
-        --sampleData ${OPENDJ_NUMBER_OF_TESTUSERS} \
-        --hostName ${OPENDJ_HOSTNAME} \
-        --no-prompt \
-        --doNotStart \
-    && adduser -S -h /home/${OPENDJ_USER} -g "${OPENDJ_USER} user" ${OPENDJ_USER} \
-    && chown -R ${OPENDJ_USER} /opt/opendj
+    && apt-get update \
+    && apt-get install -q -y \
+        coreutils \
+        net-tools \
+    && apt-get upgrade -q -y \
+    && apt-get autoclean -y \
+    && rm -rf /var/lib/apt/lists/*
 
-# We use these ports because we don't run as root user ;-)
-EXPOSE 1389 1636 4444
-
-# Copy in the template the first time DJ runs, and start DJ
-
-VOLUME [ "/opt/opendj" ]
-USER ${OPENDJ_USER}
-CMD [ "/opt/opendj/bin/start-ds", "--nodetach" ]
-
+ENTRYPOINT ["/entrypoint.sh"]
