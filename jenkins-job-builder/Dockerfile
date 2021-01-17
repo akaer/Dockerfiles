@@ -17,11 +17,11 @@
 #       akaer/jjb
 #
 
-FROM akaer/python
+FROM akaer/python3
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
-    && pip install jenkins-job-builder
+    && pip3 install jenkins-job-builder
 
 VOLUME /data
 WORKDIR /data

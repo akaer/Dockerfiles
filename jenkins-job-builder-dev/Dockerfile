@@ -17,7 +17,7 @@
 #       akaer/jjb-dev
 #
 
-FROM akaer/python
+FROM akaer/python3
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
@@ -27,9 +27,9 @@ RUN set -ex \
     && rm -rf /var/cache/apk/* \
     && git clone https://git.openstack.org/openstack-infra/jenkins-job-builder \
     && cd jenkins-job-builder \
-    && pip install -r requirements.txt \
-    && python setup.py build \
-    && python setup.py install \
+    && pip3 install -r requirements.txt \
+    && python3 setup.py build \
+    && python3 setup.py install \
     && cd ..\
     && rm -rf jenkins-job-builder
 

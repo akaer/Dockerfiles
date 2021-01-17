@@ -27,6 +27,7 @@ USER root
 
 RUN set -xe \
     && sudo apt-get update \
+    && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
         curl \
         freetds-bin \
@@ -63,14 +64,6 @@ RUN set -xe \
     && tree ${ORACLE_HOME}
 
 USER $NB_USER
-
-#RUN set -xe \
-#    && pip2 install --upgrade pip \
-#    && pip2 install cx_oracle \
-#    && pip2 install pyodbc \
-#    && pip2 install xlwt \
-#    && pip2 install XlsxWriter \
-#    && pip2 install wordcloud
 
 RUN set -xe \
     && pip install --upgrade pip \

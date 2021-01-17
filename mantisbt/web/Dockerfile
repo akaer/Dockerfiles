@@ -52,21 +52,24 @@ ENV MYSQL_DB_USERNAME mantisbt
 ENV MYSQL_DB_PASSWORD P@ssw0rd
 ENV MYSQL_DB_NAME mantisbt_db
 ENV MYSQL_DB_PORT 3306
-ENV MANTISBT_VER 2.3.1
-ENV MANTISBT_MD5 39b6c79d7b6379b02103efd97ee43edc
+ENV MANTISBT_VER 2.24.4
+ENV MANTISBT_MD5 c557b1203368c7427b92177de4ce7285
 
 RUN set -xe \
     && apk update \
     && apk add --no-cache \
         curl \
         nginx \
-        php5 \
-        php5-fpm \
-        php5-gd \
-        php5-json \
-        php5-ldap \
-        php5-mysql \
-        php5-mysqli \
+        php7 \
+        php7-fpm \
+        php7-curl \
+        php7-mbstring \
+        php7-session \
+        php7-fileinfo \
+        php7-gd \
+        php7-json \
+        php7-ldap \
+        php7-mysqli \
         tar \
     && rm -rf /var/cache/apk/* \
     && mkdir /tmp/nginx
@@ -76,12 +79,12 @@ ADD files/run.sh /tmp/run.sh
 
 RUN set -xe \
     && sed -i 's/nginx:x:100:101/nginx:x:1000:101/g' /etc/passwd \
-    && sed -i 's/memory_limit = .*/memory_limit = 768M/' /etc/php5/php.ini \
-    && sed -i 's/post_max_size = .*/post_max_size = 50M/' /etc/php5/php.ini \
-    && echo 'date.timezone = "Europe/Berlin"' >> /etc/php5/php.ini \
-    && sed -i '/^user/c \user = nginx' /etc/php5/php-fpm.conf \
-    && sed -i '/^group/c \group = nginx' /etc/php5/php-fpm.conf \
-    && sed -i 's/^listen.allowed_clients/;listen.allowed_clients/' /etc/php5/php-fpm.conf \
+    && sed -i 's/memory_limit = .*/memory_limit = 768M/' /etc/php7/php.ini \
+    && sed -i 's/post_max_size = .*/post_max_size = 50M/' /etc/php7/php.ini \
+    && echo 'date.timezone = "Europe/Berlin"' >> /etc/php7/php.ini \
+    && sed -i '/^user/c \user = nginx' /etc/php7/php-fpm.conf \
+    && sed -i '/^group/c \group = nginx' /etc/php7/php-fpm.conf \
+    && sed -i 's/^listen.allowed_clients/;listen.allowed_clients/' /etc/php7/php-fpm.conf \
     && chmod +x /tmp/run.sh
 
 RUN set -xe \

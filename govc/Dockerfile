@@ -26,7 +26,7 @@ ENV GOVC_URL https://user:password@vsphere-ip-or-hostname/sdk
 ENV GOVC_DATACENTER VCENTER-NAME
 
 RUN set -xe \
-    && wget -q https://github.com/vmware/govmomi/releases/download/v0.20.0/govc_linux_amd64.gz \
+    && wget -q https://github.com/vmware/govmomi/releases/download/v0.24.0/govc_linux_amd64.gz \
     && gunzip govc_linux_amd64.gz \
     && mv govc_linux_amd64 /usr/bin/govc \
     && chmod +x /usr/bin/govc

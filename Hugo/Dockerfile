@@ -27,7 +27,7 @@
 FROM akaer/base
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-ENV HUGO_VERSION 0.32.4
+ENV HUGO_VERSION 0.80.0
 
 RUN set -ex \
     && apk update \

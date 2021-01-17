@@ -17,11 +17,11 @@
 #       akaer/jjw
 #
 
-FROM akaer/python
+FROM akaer/python3
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
-    && pip install jenkins-job-wrecker
+    && pip3 install jenkins-job-wrecker
 
 VOLUME /data
 WORKDIR /data

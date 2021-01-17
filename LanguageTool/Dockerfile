@@ -21,7 +21,7 @@
 FROM akaer/openjre8
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-ENV LT_VERSION 3.6
+ENV LT_VERSION 5.2
 
 RUN set -ex \
     && apk update \
