@@ -91,6 +91,9 @@ RUN set -xe \
         "http://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz" -o /tmp/dokuwiki.tar.gz \
     && tar --transform='s#^dokuwiki-\([^/]*\)#var/lib/nginx/html/dokuwiki#' -xzf /tmp/dokuwiki.tar.gz \
     && rm -f /tmp/dokuwiki.tar.gz \
+
+    ### Plugins
+
     && cd /var/lib/nginx/html/dokuwiki/lib/plugins/ \
 
     # bring in bureaucracy plugin (https://www.dokuwiki.org/plugin:bureaucracy)
@@ -121,6 +124,41 @@ RUN set -xe \
     && tar xvzf /tmp/pagemod.tar.gz -C pagemod --strip-components=1 \
     && rm -f /tmp/pagemod.tar.gz \
 
+    # bring in diagrams plugin (https://www.dokuwiki.org/plugin:diagrams)
+    && mkdir diagrams \
+    && curl -sSL \
+        "https://github.com/cosmocode/dokuwiki-plugin-diagrams/archive/refs/heads/master.tar.gz" -o /tmp/diagrams.tar.gz \
+    && tar xvzf /tmp/diagrams.tar.gz -C diagrams --strip-components=1 \
+    && rm -f /tmp/diagrams.tar.gz \
+
+    # bring in flowchartjs plugin (https://www.dokuwiki.org/plugin:flowchartjs)
+    && mkdir flowchartjs \
+    && curl -sSL \
+        "https://github.com/ghbore/flowchartjs/archive/refs/heads/master.tar.gz" -o /tmp/flowchartjs.tar.gz \
+    && tar xvzf /tmp/flowchartjs.tar.gz -C flowchartjs --strip-components=1 \
+    && rm -f /tmp/flowchartjs.tar.gz \
+
+    # bring in fastwiki plugin (https://www.dokuwiki.org/plugin:fastwiki)
+    && mkdir fastwiki \
+    && curl -sSL \
+        "https://github.com/zioth/dokuwiki_fastwiki/archive/master.tar.gz" -o /tmp/fastwiki.tar.gz \
+    && tar xvzf /tmp/fastwiki.tar.gz -C fastwiki --strip-components=1 \
+    && rm -f /tmp/fastwiki.tar.gz \
+
+    # bring in dw2pdf plugin (https://www.dokuwiki.org/plugin:dw2pdf)
+    && mkdir dw2pdf \
+    && curl -sSL \
+        "https://github.com/splitbrain/dokuwiki-plugin-dw2pdf/tarball/master" -o /tmp/dw2pdf.tar.gz \
+    && tar xvzf /tmp/dw2pdf.tar.gz -C dw2pdf --strip-components=1 \
+    && rm -f /tmp/dw2pdf.tar.gz \
+
+    # bring in edittable plugin (https://www.dokuwiki.org/plugin:edittable)
+    && mkdir edittable \
+    && curl -sSL \
+        "https://github.com/cosmocode/edittable/archive/refs/heads/master.tar.gz" -o /tmp/edittable.tar.gz \
+    && tar xvzf /tmp/edittable.tar.gz -C edittable --strip-components=1 \
+    && rm -f /tmp/edittable.tar.gz \
+
     && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/data \
     && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/conf \
     && chown nginx:nginx -R /var/lib/nginx/html/dokuwiki/lib/plugins \
@@ -132,6 +170,7 @@ ADD files/doku-conf-local.php /var/lib/nginx/html/dokuwiki/conf/local.php
 ADD files/doku-conf-plugins.local.php /var/lib/nginx/html/dokuwiki/conf/plugins.local.php
 ADD files/doku-conf-acl.auth.php /var/lib/nginx/html/dokuwiki/conf/acl.auth.php
 ADD files/doku-conf-users.auth.php /var/lib/nginx/html/dokuwiki/conf/users.auth.php
+ADD files/mime.local.conf /var/lib/nginx/html/dokuwiki/conf/mime.local.conf
 
 VOLUME [ "/var/lib/nginx/html/dokuwiki/data/pages/doc" ]
 VOLUME [ "/var/lib/nginx/html/dokuwiki/data/media/wiki" ]

@@ -13,12 +13,14 @@
 #  sudo docker run --rm=true -it \
 #       --name taskwarrior \
 #       -v /etc/localtime:/etc/localtime:ro \
-#       -v $(pwd):/workdir/task \
+#       -v $(pwd):/data \
 #       akaer/taskwarrior
 #
 
-FROM akaer/base
+FROM alpine:edge
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
+
+ENV TERM dumb
 
 RUN set -ex \
     && apk update \

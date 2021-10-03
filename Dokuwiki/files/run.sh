@@ -18,4 +18,3 @@ sed -i 's|nobody|nginx|g' /etc/php7/php-fpm.d/www.conf
 
 php-fpm7 -D -c /etc/php7/php.ini -y /etc/php7/php-fpm.conf -d variables_order="EGPCS"
 nginx -g "daemon off;"
-
