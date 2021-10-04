@@ -9,7 +9,8 @@ $Global:testURL = 'https://google.de'
 Describe "All in one Test" {
 
     BeforeAll {
-        $driver = New-Object OpenQA.Selenium.Chrome.ChromeDriver
+        $chromeOptions = New-Object OpenQA.Selenium.Chrome.ChromeOptions
+        $driver = New-Object OpenQA.Selenium.Chrome.ChromeDriver($chromeOptions)
         $driver.Manage().Window.Maximize()
         $driver.Navigate().GoToUrl($Global:testURL)
     }
