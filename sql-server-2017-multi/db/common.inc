@@ -15,6 +15,7 @@ replace_vars() {
     sed -i -e "s|@@HOSTNAME@@|${HOSTNAME}|g" \
            -e "s|@@PASSWORD@@|${SA_PASSWORD}|g" \
            -e "s|@@IP@@|${IPADDR}|g" \
+           -e "s|@@DATABASE_MEMORYLIMITMB@@|${DATABASE_MEMORYLIMITMB}|g" \
            -e "s|@@NETMASK@@|${NETMASK}|g" \
         "${DSTFILE}"
 }
