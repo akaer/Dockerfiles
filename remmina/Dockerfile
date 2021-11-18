@@ -33,7 +33,10 @@ RUN set -xe \
         mesa-dri-swrast \
         mesa-gl \
         remmina \
-        ttf-ubuntu-font-family \
+        ttf-inconsolata \
+        ttf-freefont \
+        ttf-droid \
+        ttf-font-awesome \
     && rm -rf /var/cache/apk/*
 
 CMD [ "remmina" ]
