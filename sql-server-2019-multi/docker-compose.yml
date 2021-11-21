@@ -13,7 +13,7 @@ services:
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backups'
+            MSSQL_BACKUP_DIR: '/backup'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -23,7 +23,7 @@ services:
         volumes:
             - shared:/var/opt/mssql/shared
             - ssl:/tmp/ssl
-            - ./data/backup:/backups
+            - ./data/backup:/backup
         ports:
             - "10000:1444"
             - "10001:1433"
@@ -44,7 +44,7 @@ services:
             ACCEPT_EULA: Y
             MSSQL_AGENT_ENABLED: 'true'
             MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backups'
+            MSSQL_BACKUP_DIR: '/backup'
             MSSQL_RPC_PORT: 135
             MSSQL_DTC_TCP_PORT: 51000
             TZ: Europe/Berlin
@@ -54,42 +54,12 @@ services:
         volumes:
             - shared:/var/opt/mssql/shared
             - ssl:/tmp/ssl
-            - ./data/backup:/backups
+            - ./data/backup:/backup
         ports:
             - "10002:1433"
             - "20002:5022"
             - "30002:135"
             - "40002:51000"
-        networks:
-            - sqlserver-net
-    db3:
-        build: db
-        image: mssql-2019
-        restart: always
-        container_name: db3
-        hostname: db3
-        environment:
-            SA_PASSWORD: P@ssw0rd
-            MSSQL_PID: Developer
-            ACCEPT_EULA: Y
-            MSSQL_AGENT_ENABLED: 'true'
-            MSSQL_ENABLE_HADR: 1
-            MSSQL_BACKUP_DIR: '/backups'
-            MSSQL_RPC_PORT: 135
-            MSSQL_DTC_TCP_PORT: 51000
-            TZ: Europe/Berlin
-            LANG: en_US.UTF-8
-            LANGUAGE: en_US:en
-            LC_ALL: en_US.UTF-8
-        volumes:
-            - shared:/var/opt/mssql/shared
-            - ssl:/tmp/ssl
-            - ./data/backup:/backups
-        ports:
-            - "10003:1433"
-            - "20003:5022"
-            - "30003:135"
-            - "40003:51000"
         networks:
             - sqlserver-net
 networks:

@@ -10,4 +10,3 @@ RECONFIGURE WITH OVERRIDE
 GO
 EXEC sys.sp_configure N'show advanced options', N'0'  RECONFIGURE WITH OVERRIDE
 GO
-

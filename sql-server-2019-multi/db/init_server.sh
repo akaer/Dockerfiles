@@ -13,6 +13,7 @@ SCRIPT_BASE_DIR="$(cd "$( dirname "$0")" && pwd )"
 
 echo "[*] Pre customizing sql server"
 
+mkdir -p /var/opt/mssql/
 replace_vars /tmp/mssql.conf
 cp -iv /tmp/mssql.conf /var/opt/mssql/mssql.conf
 

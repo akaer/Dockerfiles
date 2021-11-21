@@ -32,15 +32,6 @@ if (@@SERVERNAME = 'db1' )
         FROM FILE = '/var/opt/mssql/shared/AG_db2_Cert.cer';
 
         GRANT CONNECT ON ENDPOINT::AGEP TO AG_db2_Login;
-
-        CREATE LOGIN AG_db3_Login WITH PASSWORD = '@@PASSWORD@@';
-        CREATE USER AG_db3_User FOR LOGIN AG_db3_Login;
-
-        CREATE CERTIFICATE AG_db3_Cert
-        AUTHORIZATION AG_db3_User
-        FROM FILE = '/var/opt/mssql/shared/AG_db3_Cert.cer';
-
-        GRANT CONNECT ON ENDPOINT::AGEP TO AG_db3_Login;
     end
 
 if (@@SERVERNAME = 'db2' )
@@ -56,33 +47,6 @@ if (@@SERVERNAME = 'db2' )
 
         CREATE LOGIN AG_db3_Login WITH PASSWORD = '@@PASSWORD@@';
         CREATE USER AG_db3_User FOR LOGIN AG_db3_Login;
-
-        CREATE CERTIFICATE AG_db3_Cert
-        AUTHORIZATION AG_db3_User
-        FROM FILE = '/var/opt/mssql/shared/AG_db3_Cert.cer';
-
-        GRANT CONNECT ON ENDPOINT::AGEP TO AG_db3_Login;
-    end
-
-if (@@SERVERNAME = 'db3' )
-    begin
-        CREATE LOGIN AG_db2_Login WITH PASSWORD = '@@PASSWORD@@';
-        CREATE USER AG_db2_User FOR LOGIN AG_db2_Login;
-
-        CREATE CERTIFICATE AG_db2_Cert
-        AUTHORIZATION AG_db2_User
-        FROM FILE = '/var/opt/mssql/shared/AG_db2_Cert.cer';
-
-        GRANT CONNECT ON ENDPOINT::AGEP TO AG_db2_Login;
-
-        CREATE LOGIN AG_db1_Login WITH PASSWORD = '@@PASSWORD@@';
-        CREATE USER AG_db1_User FOR LOGIN AG_db1_Login;
-
-        CREATE CERTIFICATE AG_db1_Cert
-        AUTHORIZATION AG_db1_User
-        FROM FILE = '/var/opt/mssql/shared/AG_db1_Cert.cer';
-
-        GRANT CONNECT ON ENDPOINT::AGEP TO AG_db1_Login;
     end
 go
 
@@ -96,7 +60,6 @@ if (@@SERVERNAME = 'db1' )
         for REPLICA ON
             N'db1' WITH (ENDPOINT_URL = N'TCP://db1:5022', FAILOVER_MODE = MANUAL, AVAILABILITY_MODE = SYNCHRONOUS_COMMIT, BACKUP_PRIORITY = 50, SEEDING_MODE = AUTOMATIC, SECONDARY_ROLE(ALLOW_CONNECTIONS = ALL)),
             N'db2' WITH (ENDPOINT_URL = N'TCP://db2:5022', FAILOVER_MODE = MANUAL, AVAILABILITY_MODE = SYNCHRONOUS_COMMIT, BACKUP_PRIORITY = 50, SEEDING_MODE = AUTOMATIC, SECONDARY_ROLE(ALLOW_CONNECTIONS = ALL)),
-            N'db3' WITH (ENDPOINT_URL = N'TCP://db3:5022', FAILOVER_MODE = MANUAL, AVAILABILITY_MODE = SYNCHRONOUS_COMMIT, BACKUP_PRIORITY = 50, SEEDING_MODE = AUTOMATIC, SECONDARY_ROLE(ALLOW_CONNECTIONS = ALL));
     end
 
 if (@@SERVERNAME = 'db2' )
@@ -104,13 +67,6 @@ if (@@SERVERNAME = 'db2' )
         ALTER AVAILABILITY GROUP [AGName] JOIN WITH (CLUSTER_TYPE = NONE)
         ALTER AVAILABILITY GROUP [AGName] GRANT CREATE ANY DATABASE
     end
-
-if (@@SERVERNAME = 'db3' )
-    begin
-        ALTER AVAILABILITY GROUP [AGName] JOIN WITH (CLUSTER_TYPE = NONE)
-        ALTER AVAILABILITY GROUP [AGName] GRANT CREATE ANY DATABASE
-    end
-
 go
 
 waitfor delay '00:00:05';
