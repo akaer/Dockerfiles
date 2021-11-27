@@ -20,11 +20,11 @@ Describe "All in one Test" {
     }
 
     Describe "Can handle cookie banner" {
-    
+
         BeforeAll {
             $cookieBtn = $driver.FindElementByXPath('//*[@id="L2AGLb"]/div')
         }
-    
+
         It "Can find the cookie warning" {
             $cookieBtn | Should -Not -BeNullOrEmpty
             $cookieBtn.Text | Should -Be 'Ich stimme zu'
