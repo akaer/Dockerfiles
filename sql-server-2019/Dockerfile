@@ -6,7 +6,7 @@
 #
 # Create:
 #
-#  sudo docker build --rm -t akaer/mssql-server-2019-linux . 2>&1 |tee docker_build.log
+#  sudo docker build --rm -t akaer/mssql-server-2019 . 2>&1 |tee docker_build.log
 #
 # Run:
 #
@@ -17,7 +17,7 @@
 #       -p 51999:51999 \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
-#       akaer/mssql-server-2019-linux
+#       akaer/mssql-server-2019
 #
 # ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
