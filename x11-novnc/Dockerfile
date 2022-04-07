@@ -17,10 +17,11 @@
 #
 #
 
-FROM ubuntu:16.04
+FROM ubuntu:20.04
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND noninteractive
 ENV SCREEN_RESOLUTION 1024x768
 ENV DISPLAY :0
 ENV APP_TO_RUN xterm
@@ -29,7 +30,7 @@ ENV HOME /home/${XUSER}
 
 RUN set -xe \
     && apt-get update \
-    && apt-get install -y \
+    && apt-get install -y -q \
         curl \
         git \
         matchbox-window-manager \
