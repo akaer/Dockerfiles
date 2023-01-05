@@ -1,0 +1,106 @@
+{
+  "mapping" : {
+    "id" : "id",
+    "password" : "password",
+    "username" : "userName",
+    "familyname" : "name.familyName",
+    "firstname" : "name.givenName",
+    "externalid" : "externalId",
+    "mail" : "emails",
+    "datecreated" : "meta.created"
+  },
+  "targetSystem" : {
+    "name" : "DB4SCIM",
+    "updateIfIdentical" : false,
+    "pingEnabled" : false,
+    "supportsPagination" : false,
+    "targetSystemAttributes" : [
+    {
+      "name" : "id",
+      "attributeType" : "STRING",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : false,
+      "primaryKey" : true
+    },
+    {
+      "name" : "password",
+      "attributeType" : "PASSWORD",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : false,
+      "primaryKey" : false
+    },
+    {
+      "name" : "username",
+      "attributeType" : "STRING",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : false,
+      "primaryKey" : false,
+      "indexed" : true
+    },
+     {
+      "name" : "familyname",
+      "attributeType" : "STRING",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : false,
+      "primaryKey" : false
+    },
+     {
+      "name" : "firstname",
+      "attributeType" : "STRING",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : false,
+      "primaryKey" : false
+    },
+     {
+      "name" : "externalid",
+      "attributeType" : "STRING",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : false,
+      "primaryKey" : false,
+      "indexed" : true
+    },
+    {
+      "name" : "mail",
+      "attributeType" : "MAP",
+      "readable" : true,
+      "writable" : true,
+      "multiValued" : true,
+      "primaryKey" : false
+    },
+    {
+      "name" : "datecreated",
+      "attributeType" : "STRING",
+      "readable" : true,
+      "writable" : false,
+      "multiValued" : false,
+      "primaryKey" : false
+    }
+   ],
+    "connectorConfiguration" : {
+      "connectorType" : "DATABASE",
+      "poolSize" : ${scim.storage.database.poolSize},
+      "configuration" : {
+        "jdbcUrl" : "${scim.storage.database.jdbcUrl}",
+        "username" : "${scim.storage.database.username}",
+        "password" : "${scim.storage.database.password}",
+        "driver" : "${scim.storage.database.driver}",
+        "table" : "${scim.storage.database.table}",
+        "read-only" : "false",
+        "table-auto-create" : "true",
+        "schema" : "",
+        "test-query" : "${scim.storage.database.test-query}",
+        "mail_table" : "create table scim_personify_email ( id INT PRIMARY KEY AUTO_INCREMENT, userid varchar(255), value varchar(255), type varchar(255), primary_ boolean, display varchar(255) )",
+        "mail_select" : "select value, type, display, primary_ as 'primary' from scim_personify_email where userid = '${id}'",
+                "mail_insert" : "insert into scim_personify_email ( userid, value, type, primary_,display ) values ('${id}', '${value}', '${type}', ${primary}, '${display}')",
+                "mail_delete" : "delete from scim_personify_email where userid = '${id}'",
+                "mail_index_1" : "create index idx_scim_personify_email_userid on scim_personify_email (userid)"
+      }
+    }
+  }
+}

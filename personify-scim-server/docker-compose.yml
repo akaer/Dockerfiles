@@ -1,0 +1,67 @@
+#
+# docker-compose for personify-scim-server
+#
+# https://hub.docker.com/r/personify/personify-scim-server
+# https://bitbucket.org/wouter29/personify-scim-server/src/master/
+#
+
+version: '3.1'
+services:
+    db:
+        image: mysql
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        container_name: pss_mysql
+        hostname: pss-mysql-server1
+        environment:
+            TZ: Europe/Berlin
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        volumes:
+          - pssdb-data:/var/lib/mysql
+        ports:
+          - 3306:3306
+        healthcheck:
+            test: mysql ${MYSQL_DATABASE} --user=${MYSQL_USER} --password='${MYSQL_PASSWORD}' --silent --execute "SELECT 1;"
+            interval: 15s
+            timeout: 20s
+            retries: 5
+    personify:
+        build: personify
+        restart: always
+        container_name: pss
+        hostname: pss-server1
+        environment:
+            TZ: Europe/Berlin
+            logging.level.be.personify.iam.scim.storage: DEBUG
+            scim.storage.implementation: be.personify.iam.scim.storage.impl.DatabaseConnectorStorage
+            scim.storage.database.configFile: /tmp/connector_database.json
+            scim.storage.database.poolSize: 1
+            scim.storage.database.jdbcUrl: jdbc:mysql://db:3306/personify_scim?verifyServerCertificate=false&useSSL=false&requireSSL=false
+            scim.storage.database.username: ${MYSQL_USER}
+            scim.storage.database.password: ${MYSQL_PASSWORD}
+            scim.storage.database.driver: com.mysql.jdbc.Driver
+            scim.storage.database.table: scim_personify_user
+            scim.storage.database.test-query: select 1
+        ports:
+            - 8080:8080
+        depends_on:
+            db:
+                condition: service_healthy
+    adminweb:
+        image: adminer
+        restart: always
+        container_name: adminweb
+        hostname: adminweb-server
+        environment:
+            TZ: Europe/Berlin
+        ports:
+          - 8044:8080
+        depends_on:
+            db:
+                condition: service_healthy
+volumes:
+    pssdb-data:
+        driver: local
