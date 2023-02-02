@@ -6,18 +6,18 @@
 #
 # Create:
 #
-#  sudo docker build --rm -t akaer/mssql-server-2017-linux . 2>&1 |tee docker_build.log
+#  sudo docker build --rm -t akaer/mssql-server-2017 . 2>&1 |tee docker_build.log
 #
 # Run:
 #
 #  sudo docker run --rm=true -it \
-#       --name mssql-server-2017-linux \
+#       --name mssql-server-2017 \
 #       -p 1433:1433 \
 #       -p 135:135 \
 #       -p 51999:51999 \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
-#       akaer/mssql-server-2017-linux
+#       akaer/mssql-server-2017
 #
 # ⚠ Hint
 # If you need persistent data that add -v sqldata:/var/opt/mssql

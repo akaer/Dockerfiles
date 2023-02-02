@@ -1,23 +1,21 @@
 #
 # Docker image for
 #
-# Microsoft SQL Server 2019
+# Microsoft SQL Server 2022
 #
 #
 # Create:
 #
-#  sudo docker build --rm -t akaer/mssql-server-2019 . 2>&1 |tee docker_build.log
+#  sudo docker build --rm -t akaer/mssql-server-2022 . 2>&1 |tee docker_build.log
 #
 # Run:
 #
 #  sudo docker run --rm=true -it \
-#       --name mssql-server-2019 \
+#       --name mssql-server-2022 \
 #       -p 1433:1433 \
-#       -p 135:135 \
-#       -p 51999:51999 \
 #       -v $(pwd)/backups:/backups:rw \
 #       -h sqlserver1 \
-#       akaer/mssql-server-2019
+#       akaer/mssql-server-2022
 #
 # ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
@@ -25,7 +23,7 @@
 # To use tmpfs as storage, specify -e LD_PRELOAD=/tmp/nodirect_open.so --mount type=tmpfs,destination=/var/opt/mssql -u 0:0
 #
 
-FROM mcr.microsoft.com/mssql/server:2019-latest
+FROM mcr.microsoft.com/mssql/server:2022-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV TZ=Europe/Berlin
