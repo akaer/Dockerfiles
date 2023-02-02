@@ -21,7 +21,7 @@
 #
 # ⚠ Hint
 # If you need persistent data that add -v sqldata:/var/opt/mssql
-# To use tmpfs as storage, specify -e LD_PRELOAD=/root/nodirect_open.so
+# To use tmpfs as storage, specify -e LD_PRELOAD=/root/nodirect_open.so --mount type=tmpfs,destination=/var/opt/mssql
 #
 
 FROM mcr.microsoft.com/mssql/server:2017-latest
@@ -49,9 +49,8 @@ RUN set -xe \
     && mkdir -p /var/opt/mssql \
     && cp /tmp/mssql.conf /var/opt/mssql/mssql.conf \
     && cc -shared -fpic -o /root/nodirect_open.so /tmp/nodirect_open.c -ldl \
-    && apt purge -y gcc \
+    && apt-get --purge remove -q -y gcc \
     && rm -rf /var/lib/apt/lists/*
-#    && echo '/root/nodirect_open.so' >> /etc/ld.so.preload
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
     CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U ${DATABASE_USER} -P ${SA_PASSWORD} -d tempdb -Q "SELECT 1" || exit 1
