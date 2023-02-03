@@ -16,7 +16,7 @@
 #       akaer/sqlmap
 #
 
-FROM akaer/python
+FROM akaer/python3
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
