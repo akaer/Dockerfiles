@@ -76,6 +76,7 @@ RUN set -xe \
     && rm -f /opt/tor.tar.xz /opt/tor.tar.xz.asc
 
 RUN set -xe \
+    && mkdir -p /data \
     && groupadd -g 1000 -r tor \
     && useradd -r -m -u 1000 -g tor -G audio,video tor \
     && chown tor:tor /data /opt/tor-browser \
