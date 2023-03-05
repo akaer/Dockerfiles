@@ -30,10 +30,10 @@ ENV MSSQL_PID=Developer
 ENV MSSQL_ENABLE_HADR=0
 ENV MSSQL_AGENT_ENABLED=false
 ENV ACCEPT_EULA=Y
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV DEBIAN_FRONTEND noninteractive
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
 COPY mssql.conf /var/opt/mssql/mssql.conf
 
@@ -45,3 +45,6 @@ RUN set -xe \
     && rm -rf /var/lib/apt/lists/*
 
 USER mssql
+
+HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
+    CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U ${DATABASE_USER} -P ${SA_PASSWORD} -d tempdb -Q "SELECT 1" || exit 1
