@@ -27,7 +27,7 @@ Describe "All in one Test" {
 
         It "Can find the cookie warning" {
             $cookieBtn | Should -Not -BeNullOrEmpty
-            $cookieBtn.Text | Should -Be 'Ich stimme zu'
+            $cookieBtn.Text | Should -Be 'Alle akzeptieren'
         }
 
         It "Can accept the cookie warning" {

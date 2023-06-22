@@ -10,12 +10,18 @@
 #
 # Run:
 #
+# sudo docker run -d --rm -p 4444:4444 -p 7900:7900 --shm-size="2g" --name se-chrome-pwsh-1 -v $(pwd)/samples:/samples akaer/selenium-chrome-powershell
+#
 # Usage:
 #
-# sudo docker exec -it se-chrome1 /bin/bash
+# sudo docker exec -it se-chrome-pwsh-1 /bin/bash
+#
+# Open VNC Display
+#
+# http://localhost:7900/?autoconnect=1&resize=scale&password=secret
+#
 
-
-FROM selenium/standalone-chrome-debug:latest
+FROM selenium/standalone-chrome:latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV POWERSHELL_TELEMETRY_OPTOUT=1
