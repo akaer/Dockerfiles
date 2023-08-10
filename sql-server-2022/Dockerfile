@@ -51,6 +51,7 @@ RUN set -xe \
     && cp /tmp/mssql.conf /var/opt/mssql/mssql.conf \
     && cc -shared -fpic -o /tmp/nodirect_open.so /tmp/nodirect_open.c -ldl \
     && apt-get --purge remove -q -y gcc \
+    && apt autoremove -q -y \
     && rm -rf /var/lib/apt/lists/*
 
 USER mssql
