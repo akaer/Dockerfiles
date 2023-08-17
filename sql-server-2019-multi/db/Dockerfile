@@ -80,6 +80,6 @@ RUN set -ex \
 USER mssql
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
-    CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U ${DATABASE_USER} -P ${SA_PASSWORD} -d tempdb -Q "SELECT 1" || exit 1
+    CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U 'sa' -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
 
 CMD /bin/bash /tmp/entrypoint.sh
