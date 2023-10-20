@@ -13,7 +13,7 @@
 #  sudo docker run --rm=true -it \
 #       --name mssql-server-2022-simple \
 #       -p 1433:1433 \
-#       -v $(pwd)/backups:/backups:rw \
+#       -v db_backups:/backups:rw \
 #       -h sqlserver1 \
 #       akaer/mssql-server-2022-simple
 #
