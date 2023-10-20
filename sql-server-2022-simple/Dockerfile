@@ -10,11 +10,13 @@
 #
 # Run:
 #
-#  sudo docker run --rm=true -it \
-#       --name mssql-server-2022-simple \
+#  sudo docker run --rm --restart=always \
+#       --name db1 \
+#       --hostname db1 \
+#       -e TZ=Europe/Berlin \
 #       -p 1433:1433 \
-#       -v db_backups:/backups:rw \
-#       -h sqlserver1 \
+#       -v db1_backups:/backups:rw \
+#       -v db1_data:/var/opt/mssql \
 #       akaer/mssql-server-2022-simple
 #
 # ⚠ Hint
