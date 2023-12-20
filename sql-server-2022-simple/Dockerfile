@@ -38,6 +38,8 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV POWERSHELL_TELEMETRY_OPTOUT=1
 
 COPY mssql.conf /var/opt/mssql/mssql.conf
 COPY entrypoint.sh /tmp/entrypoint.sh
@@ -49,9 +51,20 @@ USER root
 RUN set -xe \
     && apt-get update \
     && apt-get full-upgrade -q -y \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -q -y \
+        curl \
+        apt-transport-https \
+        sqlcmd \
+        powershell \
+        dotnet-runtime-8.0 \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /home/mssql \
+    && chown mssql /home/mssql
 
 USER mssql
+
+RUN set -xe \
+    && pwsh -NoLogo -NonInteractive -NoProfile -Command 'Install-Module -Name SqlServer,Pester,PsWriteHTML,PSScriptAnalyzer -Scope CurrentUser -Force'
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
     CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
