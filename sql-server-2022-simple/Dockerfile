@@ -60,6 +60,9 @@ RUN set -xe \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /home/mssql \
     && chown mssql /home/mssql
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /backups \
+    && chown mssql /backups
 
 USER mssql
 
