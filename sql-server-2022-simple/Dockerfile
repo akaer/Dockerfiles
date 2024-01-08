@@ -59,7 +59,7 @@ RUN set -xe \
         dotnet-runtime-8.0 \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /home/mssql \
-    && chown mssql /home/mssql
+    && chown mssql /home/mssql \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /backups \
     && chown mssql /backups
