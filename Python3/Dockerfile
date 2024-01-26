@@ -21,12 +21,10 @@ LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
     && apk update \
+    && apk upgrade \
     && apk add --no-cache \
         python3 \
-    && python3 -m ensurepip \
-    && rm -r /usr/lib/python*/ensurepip \
-    && pip3 install --upgrade pip setuptools \
-    && rm -r /root/.cache \
+    && rm -rf /root/.cache \
     && rm -rf /var/cache/apk/*
 
 CMD [ "python3", "--version" ]
