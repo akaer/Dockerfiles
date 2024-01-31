@@ -1,12 +1,12 @@
 #
 # Docker image for
 #
-# Microsoft SQL Server 2022 simple configuration
+# Microsoft SQL Server 2022 without SQL Server Agent configuration
 #
 #
 # Create:
 #
-#  sudo docker build --rm -t akaer/mssql-server-2022-simple . 2>&1 |tee docker_build.log
+#  sudo docker build --rm -t akaer/mssql-server-2022-noagent . 2>&1 |tee docker_build.log
 #
 # Run:
 #
@@ -18,7 +18,7 @@
 #       -p 1433:1433 \
 #       -v db1_backups:/backups:rw \
 #       -v db1_data:/var/opt/mssql \
-#       akaer/mssql-server-2022-simple
+#       akaer/mssql-server-2022-noagent
 #
 # ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
