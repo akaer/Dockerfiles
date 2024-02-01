@@ -10,7 +10,7 @@
 #
 # Run:
 #
-#  sudo docker run --rm --restart=always \
+#  sudo docker run -d --restart=always \
 #       --name db1 \
 #       --hostname db1 \
 #       --shm-size 1g \
@@ -22,24 +22,26 @@
 #
 # ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
+# If you need persistent data that add -v sqldata:/var/opt/mssql
+#
 #
 
 FROM mcr.microsoft.com/mssql/server:2022-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV ACCEPT_EULA Y
-ENV TZ=Europe/Berlin
 ENV DATABASE_USER sa
-ENV SA_PASSWORD=P@ssw0rd
-ENV MSSQL_PID=Developer
-ENV MSSQL_ENABLE_HADR=0
-ENV MSSQL_AGENT_ENABLED=false
+ENV DEBIAN_FRONTEND=noninteractive
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
-ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV MSSQL_AGENT_ENABLED=false
+ENV MSSQL_ENABLE_HADR=0
+ENV MSSQL_PID=Developer
 ENV POWERSHELL_TELEMETRY_OPTOUT=1
+ENV SA_PASSWORD=P@ssw0rd
+ENV TZ=Europe/Berlin
 
 COPY mssql.conf /var/opt/mssql/mssql.conf
 COPY entrypoint.sh /tmp/entrypoint.sh
@@ -52,11 +54,11 @@ RUN set -xe \
     && apt-get update \
     && apt-get full-upgrade -q -y \
     && apt-get install -q -y \
-        curl \
         apt-transport-https \
-        sqlcmd \
-        powershell \
+        curl \
         dotnet-runtime-8.0 \
+        powershell \
+        sqlcmd \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /home/mssql \
     && chown mssql /home/mssql \
