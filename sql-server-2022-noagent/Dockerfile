@@ -24,13 +24,12 @@
 # If you have to run as root use "-u 0:0" instead
 # If you need persistent data that add -v sqldata:/var/opt/mssql
 #
-#
 
 FROM mcr.microsoft.com/mssql/server:2022-latest
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
-ENV ACCEPT_EULA Y
-ENV DATABASE_USER sa
+ENV ACCEPT_EULA=Y
+ENV DATABASE_USER=sa
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV LANG=en_US.UTF-8
