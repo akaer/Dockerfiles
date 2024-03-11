@@ -16,8 +16,24 @@
 #       --shm-size 1g \
 #       -e TZ=Europe/Berlin \
 #       -p 1433:1433 \
-#       -v db1_backups:/backups:rw \
+#       -v db1_backup:/backup:rw \
 #       -v db1_data:/var/opt/mssql \
+#       akaer/mssql-server-2022
+#
+# or for possible cluster solutions
+#
+#  sudo docker run -d --restart=always \
+#       --name db1 \
+#       --hostname db1 \
+#       --shm-size 1g \
+#       -e TZ=Europe/Berlin \
+#       -p 10001:1433 \
+#       -p 20001:5022 \
+#       -p 30001:135 \
+#       -p 40001:51000 \
+#       -v db_backup:/backup:rw \
+#       -v db1_data:/var/opt/mssql \
+#       -v db_shared:/var/opt/mssql/shared \
 #       akaer/mssql-server-2022
 #
 # ⚠ Hint
@@ -41,11 +57,14 @@ ENV MSSQL_PID=Developer
 ENV POWERSHELL_TELEMETRY_OPTOUT=1
 ENV SA_PASSWORD=P@ssw0rd
 ENV TZ=Europe/Berlin
+ENV DATABASE_MEMORYLIMITMB 4096
 
-COPY mssql.conf /var/opt/mssql/mssql.conf
-COPY entrypoint.sh /tmp/entrypoint.sh
-COPY configure_sqlserver.sh /tmp/configure_sqlserver.sh
+COPY ./mssql.conf /tmp/mssql.conf
+COPY ./*.sh /tmp/
 COPY ./*.sql /tmp/
+
+HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
+    CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
 
 USER root
 
@@ -55,22 +74,28 @@ RUN set -xe \
     && apt-get install -q -y \
         apt-transport-https \
         curl \
+        dnsutils \
         dotnet-runtime-8.0 \
+        iproute2 \
+        iputils-ping \
+        net-tools \
         powershell \
         sqlcmd \
     && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /backup \
     && mkdir -p /home/mssql \
-    && chown mssql /home/mssql \
-    && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /backups \
-    && chown mssql /backups
+    && mkdir -p /var/opt/mssql/shared \
+    && mkdir -p /ssl \
+    && chmod +x /tmp/*.sh \
+    && openssl rand -writerand /root/.rnd \
+    && cp -iv /root/.rnd /home/mssql/.rnd \
+    && chown -R mssql /backup /home/mssql /var/opt/mssql /ssl
 
 USER mssql
 
 RUN set -xe \
     && pwsh -NoLogo -NonInteractive -NoProfile -Command 'Install-Module -Name SqlServer,Pester,PsWriteHTML,PSScriptAnalyzer,dbatools -Scope CurrentUser -Force -AcceptLicense -ErrorAction Stop'
 
-HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
-    CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
+USER root
 
 CMD /bin/bash /tmp/entrypoint.sh

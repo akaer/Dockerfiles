@@ -21,7 +21,7 @@ done
 
 while true
 do
-    if grep -i -q "has been set for engine and full-text services" /var/opt/mssql/log/errorlog; then
+    if grep -i -q "Recovery is complete. This is an informational message only. No user action is required." /var/opt/mssql/log/errorlog; then
         break
     else
         sleep 5
