@@ -10,18 +10,30 @@
 #
 # Run:
 #
-# sudo docker run -d --rm -p 4444:4444 -p 7900:7900 --shm-size="2g" --name se-chrome-pwsh-1 -v $(pwd)/samples:/samples akaer/selenium-chrome-powershell
+# sudo docker run -d --rm -p 4444:4444 -p 7900:7900 --shm-size="2g" --name se-chrome-pwsh-1 -v $(pwd)/samples:/data:ro akaer/selenium-chrome-powershell
 #
 # Usage:
 #
 # sudo docker exec -it se-chrome-pwsh-1 /bin/bash
 #
+# or to run the sample directly
+#
+# sudo docker exec -it se-chrome-pwsh-1 pwsh -Command "Invoke-Pester -Output Detailed"
+#
 # Open VNC Display
 #
 # http://localhost:7900/?autoconnect=1&resize=scale&password=secret
 #
+#
+# WARNING: Currently we are stuck with version 115 of Chrome as the PowerShell module for Selenium
+# is still not fixed. See https://github.com/adamdriscoll/selenium-powershell/issues/234
+# Also, there are some restrictions like taking screenshots within PowerShell:
+#   The type initializer for 'Gdip' threw an exception.
+#      System.Drawing.Common is not supported on non-Windows platforms. See
+#      https://aka.ms/systemdrawingnonwindows for more information.
+#
 
-FROM selenium/standalone-chrome:latest
+FROM selenium/standalone-chrome:115.0
 LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
 
 ENV POWERSHELL_TELEMETRY_OPTOUT=1
@@ -56,7 +68,9 @@ RUN set -xe \
         /usr/share/doc/* \
         /var/cache/* \
         /var/lib/apt/lists/* \
-        /var/tmp/*
+        /var/tmp/* \
+    && mkdir -p /home/seluser/.local/lib \
+    && chown -R seluser:seluser /home/seluser
 
 USER seluser
 
@@ -65,4 +79,4 @@ RUN set -xe \
     && pwsh -NoLogo -NoProfile -Command " \
         \$ErrorActionPreference = 'Stop' ; \
         \$ProgressPreference = 'SilentlyContinue' ; \
-        Install-Module Pester,Selenium,PSScriptAnalyzer -Force"
+        Install-Module Pester,Selenium -Force"
