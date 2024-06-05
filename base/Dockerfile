@@ -25,6 +25,7 @@ RUN set -ex \
     && apk add --no-cache \
         ca-certificates \
         bash \
+        curl \
     && rm -rf /var/cache/apk/*
 
 CMD [ "/bin/bash" ]
