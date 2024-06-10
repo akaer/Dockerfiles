@@ -32,13 +32,18 @@ ENV ACCEPT_EULA=Y
 ENV DATABASE_USER=sa
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+ENV DOTNET_EnableDiagnostics=0
+ENV DOTNET_TELEMETRY_OPTOUT=1
+ENV POWERSHELL_CLI_TELEMETRY_OPTOUT=1
+ENV POWERSHELL_TELEMETRY_OPTOUT=1
+ENV POWERSHELL_UPDATECHECK=Off
+ENV POWERSHELL_UPDATECHECK_OPTOUT=1
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV MSSQL_AGENT_ENABLED=false
 ENV MSSQL_ENABLE_HADR=0
 ENV MSSQL_PID=Developer
-ENV POWERSHELL_TELEMETRY_OPTOUT=1
 ENV SA_PASSWORD=P@ssw0rd
 ENV TZ=Europe/Berlin
 
@@ -55,7 +60,8 @@ RUN set -xe \
     && apt-get install -q -y \
         apt-transport-https \
         curl \
-        dotnet-runtime-8.0 \
+        dotnet-sdk-8.0 \
+        aspnetcore-runtime-8.0 \
         powershell \
         sqlcmd \
     && rm -rf /var/lib/apt/lists/* \
