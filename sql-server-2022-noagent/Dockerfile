@@ -70,7 +70,6 @@ RUN set -xe \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /home/mssql \
     && chown mssql /home/mssql \
-    && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /backups \
     && chown mssql /backups \
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash
