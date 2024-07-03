@@ -49,7 +49,6 @@ USER root
 
 RUN set -xe \
     && apt-get update \
-    && apt-get full-upgrade -q -y \
     && apt-get install -q -y \
         sqlcmd \
     && rm -rf /var/lib/apt/lists/* \
