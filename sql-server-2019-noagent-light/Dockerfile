@@ -1,12 +1,12 @@
 #
 # Docker image for
 #
-# Microsoft SQL Server 2022 without SQL Server Agent configuration
+# Microsoft SQL Server 2019 without SQL Server Agent configuration
 #
 #
 # Create:
 #
-#  sudo docker build --rm -t akaer/mssql-server-2022-noagent-light . 2>&1 |tee docker_build.log
+#  sudo docker build --rm -t akaer/mssql-server-2019-noagent-light . 2>&1 |tee docker_build.log
 #
 # Run:
 #
@@ -18,14 +18,14 @@
 #       -p 1433:1433 \
 #       -v db1_backups:/backups:rw \
 #       -v db1_data:/var/opt/mssql \
-#       akaer/mssql-server-2022-noagent-light
+#       akaer/mssql-server-2019-noagent-light
 #
 # ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
 # If you need persistent data that add -v sqldata:/var/opt/mssql
 #
 
-FROM mcr.microsoft.com/mssql/server:2022-latest
+FROM mcr.microsoft.com/mssql/server:2019-latest
 LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
 ENV ACCEPT_EULA=Y

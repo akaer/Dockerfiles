@@ -26,7 +26,7 @@
 #
 
 FROM mcr.microsoft.com/mssql/server:2022-latest
-LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
+LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
 ENV ACCEPT_EULA=Y
 ENV DATABASE_USER=sa
@@ -170,4 +170,5 @@ EOF
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
     CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
 
-CMD /bin/bash /tmp/entrypoint.sh
+CMD ["/bin/bash","/tmp/entrypoint.sh"]
+

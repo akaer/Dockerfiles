@@ -1,12 +1,12 @@
 #
 # Docker image for
 #
-# Microsoft SQL Server 2019
+# Microsoft SQL Server 2019 without SQL Server Agent configuration
 #
 #
 # Create:
 #
-#  sudo docker build --rm -t akaer/mssql-server-2019 . 2>&1 | tee docker_build.log
+#  sudo docker build --rm -t akaer/mssql-server-2019-noagent . 2>&1 |tee docker_build.log
 #
 # Run:
 #
@@ -18,23 +18,7 @@
 #       -p 1433:1433 \
 #       -v db1_backups:/backups:rw \
 #       -v db1_data:/var/opt/mssql \
-#       akaer/mssql-server-2019
-#
-# or for possible cluster solutions
-#
-#  sudo docker run -d --restart=always \
-#       --name db1 \
-#       --hostname db1 \
-#       --shm-size 1g \
-#       -e TZ=Europe/Berlin \
-#       -p 10001:1433 \
-#       -p 20001:5022 \
-#       -p 30001:135 \
-#       -p 40001:51000 \
-#       -v db_backups:/backups:rw \
-#       -v db1_data:/var/opt/mssql \
-#       -v db_shared:/var/opt/mssql/shared \
-#       akaer/mssql-server-2019
+#       akaer/mssql-server-2019-noagent
 #
 # ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
@@ -57,15 +41,15 @@ ENV POWERSHELL_UPDATECHECK_OPTOUT=1
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
-ENV MSSQL_AGENT_ENABLED=true
-ENV MSSQL_ENABLE_HADR=1
+ENV MSSQL_AGENT_ENABLED=false
+ENV MSSQL_ENABLE_HADR=0
 ENV MSSQL_PID=Developer
 ENV SA_PASSWORD=P@ssw0rd
 ENV TZ=Europe/Berlin
-ENV DATABASE_MEMORYLIMITMB=4096
 
-COPY mssql.conf /tmp/mssql.conf
-COPY ./*.sh /tmp/
+COPY mssql.conf /var/opt/mssql/mssql.conf
+COPY entrypoint.sh /tmp/entrypoint.sh
+COPY configure_sqlserver.sh /tmp/configure_sqlserver.sh
 COPY ./*.sql /tmp/
 
 USER root
@@ -75,27 +59,19 @@ RUN set -xe \
     && apt-get full-upgrade -q -y \
     && apt-get install -q -y \
         apt-transport-https \
-        aspnetcore-runtime-8.0 \
         ca-certificates \
         curl \
-        dnsutils \
-        dotnet-sdk-8.0 \
         git \
-        iproute2 \
-        iputils-ping \
-        net-tools \
+        dotnet-sdk-8.0 \
+        aspnetcore-runtime-8.0 \
         powershell \
         sqlcmd \
         vim \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /home/mssql \
+    && chown mssql /home/mssql \
     && mkdir -p /backups \
-    && mkdir -p /var/opt/mssql/shared \
-    && mkdir -p /ssl \
-    && chown mssql /ssl /var/opt/mssql/shared /backups /home/mssql /tmp/*.sh /tmp/*.conf /tmp/*.sql \
-    && chmod +x /tmp/*.sh \
-    && openssl rand -writerand /root/.rnd \
-    && cp -iv /root/.rnd /home/mssql/.rnd \
+    && chown mssql /backups \
     && curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 
 USER mssql
