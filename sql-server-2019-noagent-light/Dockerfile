@@ -16,7 +16,7 @@
 #       --shm-size 1g \
 #       -e TZ=Europe/Berlin \
 #       -p 1433:1433 \
-#       -v db1_backups:/backups:rw \
+#       -v db1_backups:/backups \
 #       -v db1_data:/var/opt/mssql \
 #       akaer/mssql-server-2019-noagent-light
 #
@@ -50,10 +50,19 @@ USER root
 RUN set -xe \
     && apt-get update \
     && apt-get install -q -y \
+        curl \
+        libunwind8 \
         sqlcmd \
+        unzip \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir -p /backups \
-    && chown mssql /backups
+    && mkdir -p /opt/sqlpackage \
+    && curl -sSLO https://aka.ms/sqlpackage-linux \
+    && unzip sqlpackage-linux -d /opt/sqlpackage/ \
+    && rm sqlpackage-linux \
+    && chmod +x /opt/sqlpackage/sqlpackage \
+    && ln -s /opt/sqlpackage/sqlpackage /usr/bin/sqlpackage \
+    && mkdir -p /backups /home/mssql \
+    && chown mssql /backups /home/mssql
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
     CMD /opt/mssql-tools/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
