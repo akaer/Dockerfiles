@@ -59,7 +59,7 @@ RUN set -xe \
     && curl -sSLO https://aka.ms/sqlpackage-linux \
     && unzip sqlpackage-linux -d /opt/sqlpackage/ \
     && rm sqlpackage-linux \
-    && chmod +x /opt/sqlpackage/sqlpackage /tmp/*.sh \
+    && chmod 777 /opt/sqlpackage/sqlpackage /tmp/*.sh \
     && ln -s /opt/sqlpackage/sqlpackage /usr/bin/sqlpackage \
     && mkdir -p /backups \
     && chown mssql /backups
