@@ -16,16 +16,13 @@
 #
 
 FROM akaer/python3
-LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
+LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
 RUN set -ex \
-    && apk update \
-    && apk add --no-cache \
-        bash \
-    && rm -rf /var/cache/apk/*
-
-RUN set -ex \
-    && pip3 install pylanguagetool beautifulsoup4 \
+    && pip3 install \
+        pylanguagetool==0.10.0 \
+        beautifulsoup4 \
+        setuptools \
     && mkdir /data
 
 VOLUME /data

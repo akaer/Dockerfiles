@@ -17,7 +17,7 @@
 #
 
 FROM akaer/base
-LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
+LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
 ENV VIRTUAL_ENV=/tmp/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -33,8 +33,8 @@ RUN set -ex \
 
 RUN set -ex \
     && python -m venv $VIRTUAL_ENV \
-    && pip install --upgrade pip \
-    && pip install textblob beautifulsoup4 lxml pytest linkchecker
+    && source $VIRTUAL_ENV/bin/activate \
+    && pip install --upgrade pip
 
 CMD [ "python3", "--version" ]
 

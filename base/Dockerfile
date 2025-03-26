@@ -17,9 +17,9 @@
 #
 
 FROM alpine:latest
-LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
+LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
-ENV TERM dumb
+ENV TERM=dumb
 
 RUN set -ex \
     && apk add --no-cache \
