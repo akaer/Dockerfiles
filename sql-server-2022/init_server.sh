@@ -32,6 +32,8 @@ openssl req -x509 -nodes -newkey rsa:4096 \
     -keyout "/ssl/${HOSTNAME}_mssql.key" \
     -out "/ssl/${HOSTNAME}_mssql.pem" -days 365
 
+chown -R mssql /ssl
+
 echo "[*] Pre customizing sql server done"
 
 touch /var/opt/mssql/configure_done
