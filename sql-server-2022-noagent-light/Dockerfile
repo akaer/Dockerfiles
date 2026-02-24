@@ -13,7 +13,7 @@
 #  sudo docker run -d --restart=always \
 #       --name db1 \
 #       --hostname db1 \
-#       --shm-size 1g \
+#       --shm-size 2g \
 #       -e TZ=Europe/Berlin \
 #       -p 1433:1433 \
 #       -v db1_backups:/backups \
