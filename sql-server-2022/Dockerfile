@@ -1,7 +1,7 @@
 #
 # Docker image for
 #
-# Microsoft SQL Server 2022
+# Microsoft SQL Server 2022 and some tooling
 #
 #
 # Create:
@@ -13,7 +13,7 @@
 #  sudo docker run -d --restart=always \
 #       --name db1 \
 #       --hostname db1 \
-#       --shm-size 1g \
+#       --shm-size 2g \
 #       -e TZ=Europe/Berlin \
 #       -p 1433:1433 \
 #       -v db1_backups:/backups:rw \
@@ -25,7 +25,7 @@
 #  sudo docker run -d --restart=always \
 #       --name db1 \
 #       --hostname db1 \
-#       --shm-size 1g \
+#       --shm-size 2g \
 #       -e TZ=Europe/Berlin \
 #       -p 10001:1433 \
 #       -p 20001:5022 \
@@ -47,6 +47,7 @@ LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 ENV ACCEPT_EULA=Y
 ENV DATABASE_USER=sa
 ENV DEBIAN_FRONTEND=noninteractive
+ENV DOTNET_NOLOGO=true
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 ENV DOTNET_EnableDiagnostics=0
 ENV DOTNET_TELEMETRY_OPTOUT=1
@@ -71,21 +72,23 @@ COPY ./*.sql /tmp/
 USER root
 
 RUN set -xe \
+    && wget https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt install software-properties-common -q -y \
+    && add-apt-repository ppa:dotnet/backports \
     && apt-get update \
     && apt-get full-upgrade -q -y \
     && apt-get install -q -y \
-        apt-transport-https \
-        aspnetcore-runtime-8.0 \
-        ca-certificates \
         curl \
         dnsutils \
-        dotnet-sdk-8.0 \
+        dotnet-sdk-10.0 \
         git \
         iproute2 \
         iputils-ping \
         net-tools \
         powershell \
-        sqlcmd \
         vim \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /home/mssql \
@@ -111,88 +114,104 @@ set nocompatible
 filetype off
 
 " Install vim-plug if we don't already have it
-if empty(glob('~/.vim/autoload/plug.vim'))
-silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-autocmd VimEnter * PlugInstall --sync | source ~/.vimrc
+if empty(glob('~/.vim/bundle/Vundle.vim'))
+    silent !git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 endif
 
-call plug#begin('~/.vim/plugged')
-
-Plug 'bling/vim-airline'
-Plug 'bling/vim-bufferline'
-Plug 'ervandew/supertab'
-Plug 'kien/ctrlp.vim'
-Plug 'powerline/powerline'
-Plug 'pprovost/vim-ps1'
-Plug 'preservim/nerdtree'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'scrooloose/syntastic'
-Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'wincent/command-t'
-
-call plug#end()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'arcticicestudio/nord-vim'
+Plugin 'bling/vim-airline'
+Plugin 'bling/vim-bufferline'
+Plugin 'ervandew/supertab'
+Plugin 'kien/ctrlp.vim'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'PProvost/vim-ps1.git'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'wincent/command-t'
+call vundle#end()
 
 filetype plugin indent on
-let mapleader=","
-set number " Show line numbers
-set linebreak " Break lines at word (requires Wrap lines)
-set showbreak=+++ "Wrap-broken line prefix
-set textwidth=100 " Line wrap (number of cols)
-set showmatch " Highlight matching brace
-set visualbell " Use visual bell (no beeping)
 
-set hlsearch " Highlight all search results
-set smartcase " Enable smart-case search
-set ignorecase " Always case-insensitive
-set incsearch " Searches for strings incrementally
-
-set autoindent " Auto-indent new lines
-set expandtab " Use spaces instead of tabs
-set shiftwidth=4 " Number of auto-indent spaces
-set smartindent " Enable smart-indent
-set smarttab " Enable smart-tabs
-set softtabstop=4 " Number of spaces per Tab
-
-"" Advanced
-set ruler " Show row and column ruler information
-set undolevels=1000 " Number of undo levels
-set backspace=indent,eol,start " Backspace behaviour
-set encoding=utf-8
-"set fileencoding=utf-8
-set termencoding=utf-8
-set pastetoggle=<F11>
-" Display settings
-set cmdheight=2
 set laststatus=2
-set scrolloff=3
-set lazyredraw
-set showcmd
-set showmode
+set pastetoggle=<f11>
+let mapleader=","
+set showmatch
+
+set hlsearch
+set smartcase
+set ignorecase
+set incsearch
+
+set autoindent
+set expandtab
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+set smarttab
+set smartindent
+
 set cursorline
 
+" Set encoding
+set encoding=utf-8
+
+" Disable Backup and Swap files
+set noswapfile
+set nobackup
+set nowritebackup
+
+set list listchars=tab:>>,trail:*
+" Disable Mode Display because Status line is on
+set noshowmode
+
+" Strip trailing whitespaces on each save
+fun! <SID>StripTrailingWhitespaces()
+  let l = line(".")
+  let c = col(".")
+  %s/\s\+$//e
+  call cursor(l, c)
+endfun
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
+" Close window if last remaining window is NerdTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Disable code folding
+set nofoldenable
+
+nnoremap <f2> :NERDTreeToggle<cr>
+
+set t_Co=256
+syntax on
+
 let g:airline_powerline_fonts=1
-let g:airline_theme='badwolf'
+let g:airline_theme='nord'
 let g:airline#extensions#tabline#enabled=1
-" Show just the filename
 let g:airline#extensions#tabline#fnamemod=':t'
 let g:airline#extensions#tabline#formatter='unique_tail'
-set t_Co=256
+
+colorscheme nord
+let g:nord_italic = 1
+let g:nord_italic_comments = 1
+let g:nord_underline = 1
+let g:nord_cursor_line_number_background = 1
 
 nnoremap <f2> :NERDTreeToggle<cr>
 let g:NERDTreeWinSize=40
 let g:NERDTreeMouseMode=2
 let g:NERDTreeIgnore=['\~$']
 
-let g:ps1_nofold_blocks = 1
-let g:ps1_nofold_sig = 1
-
 let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 EOF
 
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
-    CMD /usr/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
+    CMD /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
 
 CMD ["/bin/bash","/tmp/entrypoint.sh"]
 
