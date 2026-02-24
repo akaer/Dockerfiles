@@ -52,7 +52,6 @@ RUN set -xe \
     && apt-get install -q -y \
         curl \
         libunwind8 \
-        sqlcmd \
         unzip \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /opt/sqlpackage \
@@ -64,8 +63,10 @@ RUN set -xe \
     && mkdir -p /backups \
     && chown mssql /backups
 
+USER mssql
+
 HEALTHCHECK --interval=15s --timeout=3s --start-period=30s --retries=10 \
-    CMD /usr/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
+    CMD /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -d tempdb -Q 'SELECT 1' || exit 1
 
 CMD ["/bin/bash","/tmp/entrypoint.sh"]
 

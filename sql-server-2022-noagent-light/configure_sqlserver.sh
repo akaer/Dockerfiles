@@ -10,7 +10,7 @@ SCRIPT_BASE_DIR="$(cd "$( dirname "$0")" && pwd )"
 run_sql_file() {
     local -r SQLFILE="${1:-unset}"; shift
 
-    /usr/bin/sqlcmd -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -i "${SQLFILE}"
+    /opt/mssql-tools18/bin/sqlcmd -C -S localhost -U "${DATABASE_USER}" -P "${SA_PASSWORD}" -i "${SQLFILE}"
 }
 
 echo "[*] Wait for server to startup"
