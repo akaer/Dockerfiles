@@ -23,14 +23,14 @@
 #
 
 FROM openidentityplatform/opendj:latest
-LABEL maintainer "André Raabe <andre.raabe@gmail.com>"
+LABEL maintainer="André Raabe <andre.raabe@gmail.com>"
 
-ENV DEBIAN_FRONTEND noninteractive
-ENV OPENDJ_USER opendj
-ENV BASE_DN dc=ldap-lab,dc=com
-ENV ROOT_PASSWORD P@ssw0rd
-ENV PORT 1389
-ENV LDAPS_PORT 1636
+ENV DEBIAN_FRONTEND="noninteractive"
+ENV OPENDJ_USER="opendj"
+ENV BASE_DN="dc=ldap-lab,dc=com"
+ENV ROOT_PASSWORD="P@ssw0rd"
+ENV PORT=1389
+ENV LDAPS_PORT=1636
 
 ADD healthcheck.sh /healthcheck.sh
 ADD entrypoint.sh /entrypoint.sh
