@@ -21,6 +21,13 @@
 #       akaer/mssql-server-2025-noagent-light
 #
 # ⚠ Hint
+# Taken from: https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-known-issues?view=sql-server-ver17&tabs=rhel9#sql-server-on-linux-fails-to-start-on-machines-with-hybrid-cpu-architecture
+#
+# Issue: SQL Server instances on Linux might fail to start if the machine uses an Intel 12th Gen or later hybrid architecture CPU, and the host operating system is Linux.
+#
+# Workaround: Limit the number of CPU cores available to SQL Server by using the --cpuset-cpus option when running the container. For example, to limit SQL Server to use only the first 4 CPU cores, you can run the container with the following command: --cpuset-cpus=0-3
+
+# ⚠ Hint
 # If you have to run as root use "-u 0:0" instead
 # If you need persistent data that add -v sqldata:/var/opt/mssql
 #
